@@ -7,7 +7,7 @@ class Release {
     String releaseName
     String jsonString
     String releaseUrl
-    GenreType genre
+    Genre genre
     Artist artist
     String artistName
     Medium medium

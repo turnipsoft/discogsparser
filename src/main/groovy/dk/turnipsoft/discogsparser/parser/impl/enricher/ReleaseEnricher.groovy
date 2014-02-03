@@ -3,6 +3,7 @@ package dk.turnipsoft.discogsparser.parser.impl.enricher
 import dk.turnipsoft.discogsparser.api.ListingEnricher
 import dk.turnipsoft.discogsparser.model.Configuration
 import dk.turnipsoft.discogsparser.model.Context
+import dk.turnipsoft.discogsparser.model.Genre
 import dk.turnipsoft.discogsparser.model.Listing
 import dk.turnipsoft.discogsparser.model.Release
 import dk.turnipsoft.discogsparser.util.HttpUtil
@@ -44,6 +45,8 @@ class ReleaseEnricher implements ListingEnricher {
         release.releaseDate = jsonMap.get('released')
         release.artistName = jsonMap.get('artists').get(0).get('name')
         listing.release = release
+
+        Genre genre = Genre.getGenreType(jsonMap)
     }
 
     @Override
