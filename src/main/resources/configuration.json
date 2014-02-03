@@ -1,0 +1,15 @@
+{
+    "configuration" : {
+        "listingurl" : "http://api.discogs.com/users/$username/inventory",
+        "releaseurl" : "http://api.discogs.com/users/$username/inventory",
+        "username" : "shartvig",
+        "generatedir" : "~/discogsparser",
+        "databasename" : "discogs.db",
+        "enrichers" : [ "dk.turnipsoft.discogsparser.parser.impl.ReleaseEnricher",
+                        "dk.turnipsoft.discogsparser.parser.impl.GradingEnricher",
+                        "dk.turnipsoft.discogsparser.parser.impl.PriceEnricher" ],
+        "persister" : "dk.turnipsoft.discogsparser.parser.impl.JsonPersister",
+        "listingProcessors" : ["dk.turnipsoft.discogsparser.parser.impl.HtmlProcessor"]
+
+    }
+}

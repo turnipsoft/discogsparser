@@ -1,0 +1,42 @@
+apply plugin: 'groovy'
+apply plugin: 'jacoco'
+apply plugin: "project-report"
+
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+group = 'discogsparser'
+
+
+jacoco {
+    toolVersion = "0.6.4.201312101107"
+}
+
+jacocoTestReport {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+    additionalSourceDirs = files(sourceSets.main.allGroovy.srcDirs)
+}
+
+
+String slf4jVersion = '1.7.5'
+String logbackVersion = '1.0.13'
+
+dependencies {
+    testCompile ('org.spockframework:spock-core:0.7-groovy-2.0') {
+        exclude module: 'groovy-all'
+    }
+    testCompile ('org.springframework:spring-test:4.0.0.RELEASE') {
+    }
+
+    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+
+    compile 'org.codehaus.groovy:groovy:2.2.1'
+    compile 'org.codehaus.groovy:groovy-json:2.2.1'
+
+    compile 'org.apache.httpcomponents:httpclient:4.3'
+
+    compile "org.slf4j:slf4j-api:${slf4jVersion}"
+    compile "ch.qos.logback:logback-classic:${logbackVersion}"
+}
