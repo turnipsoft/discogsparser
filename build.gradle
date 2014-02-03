@@ -3,14 +3,18 @@ apply plugin: 'jacoco'
 apply plugin: "project-report"
 
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
 
 group = 'discogsparser'
 
 
 jacoco {
     toolVersion = "0.6.4.201312101107"
+}
+
+repositories {
+    mavenCentral()
 }
 
 jacocoTestReport {

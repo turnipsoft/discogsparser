@@ -21,7 +21,12 @@ class ReleaseEnricher implements ListingEnricher {
     }
 
     Listing findListing(Context context, Listing listing) {
-        context.allListings.collect {it.id==listing.id}?.first()
+        List<Listing> listings = context.allListings.collect {it.id==listing.id}
+        if (listings.size()==0) {
+            return null
+        } else {
+            return listings.first()
+        }
     }
 
     public Map<String, Object> getJSON(String url) {
