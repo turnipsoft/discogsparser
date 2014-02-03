@@ -1,0 +1,28 @@
+{"listings": [
+    {
+    "status": "For Sale",
+    "price": {
+        "currency": "EUR",
+        "value": 20.0},
+    "allow_offers": false,
+    "sleeve_condition": "Near Mint (NM or M-)",
+    "id": 43980514,
+    "condition": "Near Mint (NM or M-)",
+    "posted": "2011-09-25T00:42:59",
+    "ships_from": "Denmark",
+    "uri": "http://www.discogs.com/sell/item/43980514",
+    "comments": "",
+    "seller": {
+        "username": "shartvig",
+        "resource_url": "http://api.discogs.com/users/shartvig",
+        "id": 1188844},
+    "release": {
+        "catalog_number": "DNO 149",
+        "resource_url": "http://api.discogs.com/releases/1039365",
+        "year": 2007,
+        "id": 1039365,
+        "description": "Ulrich Schnauss - Goodbye (2xLP, Album)"},
+    "resource_url": "http://api.discogs.com/marketplace/listings/43980514",
+    "audio": false}
+    ]
+}

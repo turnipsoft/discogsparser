@@ -10,7 +10,13 @@ class Listing {
     double priceDkk
     String comment
     Release release
-    Grading grading
+    Grading sleeveGrading
+    String sleeveGradingString
+    Grading discGrading
+    String discGradingString
+    boolean forSale
+    String releaseUrl
+    long id
 
     String listingJson
 

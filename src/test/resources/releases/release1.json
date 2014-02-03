@@ -1,0 +1,158 @@
+{
+    "status": "Accepted",
+    "styles": ["Downtempo", "Shoegazer"],
+    "videos": [
+        {
+            "duration": 474,
+            "description": "Ulrich Schnauss - Goodbye",
+            "embed": true,
+            "uri": "http://www.youtube.com/watch?v=Zf-dXcBcoHo",
+            "title": "Ulrich Schnauss - Goodbye"
+        },
+        {
+            "duration": 382,
+            "description": "Ulrich Schnauss - Stars",
+            "embed": true,
+            "uri": "http://www.youtube.com/watch?v=cP-GJ3MYOIM",
+            "title": "Ulrich Schnauss - Stars"
+        },
+        {
+            "duration": 477,
+            "description": "Ulrich Schnauss - Goodbye",
+            "embed": true,
+            "uri": "http://www.youtube.com/watch?v=coFLwpo8Ifo",
+            "title": "Ulrich Schnauss - Goodbye"
+        },
+        {
+            "duration": 402,
+            "description": "Chromium voyager - Ulrich Schnauss - Einfeld",
+            "embed": true,
+            "uri": "http://www.youtube.com/watch?v=7E6hvpv_CHA",
+            "title": "Chromium voyager - Ulrich Schnauss - Einfeld"
+        },
+        {
+            "duration": 306,
+            "description": "Ulrich Schnauss-Here Today,Gone Tomorrow",
+            "embed": true,
+            "uri": "http://www.youtube.com/watch?v=lONpqHqBo2Y",
+            "title": "Ulrich Schnauss-Here Today,Gone Tomorrow"
+        }
+    ],
+    "series": [],
+    "released_formatted": "Jul 2007",
+    "labels": [
+        {
+            "id": 29700,
+            "resource_url": "http://api.discogs.com/labels/29700",
+            "catno": "DNO 149",
+            "name": "Domino USA",
+            "entity_type": ""
+        }
+    ],
+    "estimated_weight": 460,
+    "community": {
+        "status": "Accepted",
+        "rating": {
+            "count": 41,
+            "average": 4.44
+        },
+        "have": 163,
+        "contributors": [
+            {
+                "username": "maka",
+                "resource_url": "http://api.discogs.com/users/maka"
+            },
+            {
+                "username": "leavingharvard",
+                "resource_url": "http://api.discogs.com/users/leavingharvard"
+            }
+        ],
+        "want": 78,
+        "submitter": {
+            "username": "maka",
+            "resource_url": "http://api.discogs.com/users/maka"
+        },
+        "data_quality": "Correct"
+    },
+    "released": "2007-07-00",
+    "master_url": "http://api.discogs.com/masters/44993",
+    "year": 2007,
+    "images": [
+        {
+            "uri": "http://api.discogs.com/image/R-1039365-1295860244.jpeg",
+            "height": 594,
+            "width": 600,
+            "resource_url": "http://api.discogs.com/image/R-1039365-1295860244.jpeg",
+            "type": "primary",
+            "uri150": "http://api.discogs.com/image/R-150-1039365-1295860244.jpeg"
+        },
+        {
+            "uri": "http://api.discogs.com/image/R-1039365-1287800350.jpeg",
+            "height": 399,
+            "width": 412,
+            "resource_url": "http://api.discogs.com/image/R-1039365-1287800350.jpeg",
+            "type": "secondary",
+            "uri150": "http://api.discogs.com/image/R-150-1039365-1287800350.jpeg"
+        }
+    ],
+    "format_quantity": 2,
+    "id": 1039365,
+    "genres": ["Electronic", "Rock"],
+    "thumb": "http://api.discogs.com/image/R-150-1039365-1295860244.jpeg",
+    "artists": [
+        {
+            "join": "",
+            "name": "Ulrich Schnauss",
+            "anv": "",
+            "tracks": "",
+            "role": "",
+            "resource_url": "http://api.discogs.com/artists/22152",
+            "id": 22152
+        }
+    ],
+    "extraartists": [],
+    "formats": [
+        {
+            "descriptions": ["LP", "Album"],
+            "name": "Vinyl",
+            "qty": "2"
+        }
+    ],
+    "title": "Goodbye",
+    "country": "US",
+    "companies": [],
+    "uri": "http://www.discogs.com/Ulrich-Schnauss-Goodbye/release/1039365",
+    "resource_url": "http://api.discogs.com/releases/1039365",
+    "master_id": 44993,
+    "tracklist": [
+        {
+            "duration": "",
+            "position": "A1",
+            "title": "Never Be The Same"
+        },
+        {
+            "duration": "",
+            "position": "A2",
+            "extraartists": [
+                {
+                    "join": "",
+                    "name": "Aidan Banks",
+                    "anv": "",
+                    "tracks": "",
+                    "role": "Voice",
+                    "resource_url": "http://api.discogs.com/artists/827980",
+                    "id": 827980
+                }, {"join": "",
+                    "name": "Matt Dabbs",
+                    "anv": "",
+                    "tracks": "",
+                    "role": "Voice",
+                    "resource_url": "http://api.discogs.com/artists/827981",
+                    "id": 827981
+                }
+            ],
+            "title": "Shine"
+        }
+    ],
+    "data_quality": "Correct"
+}

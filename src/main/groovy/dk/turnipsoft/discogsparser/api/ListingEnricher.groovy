@@ -1,6 +1,7 @@
 package dk.turnipsoft.discogsparser.api
 
 import dk.turnipsoft.discogsparser.model.Configuration
+import dk.turnipsoft.discogsparser.model.Context
 import dk.turnipsoft.discogsparser.model.Listing
 
 /**
@@ -9,6 +10,6 @@ import dk.turnipsoft.discogsparser.model.Listing
 public interface ListingEnricher {
 
     void init(Configuration configuration)
-    void enrich(Listing listing)
+    void enrich(Listing listing, Context context)
 
 }

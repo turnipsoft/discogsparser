@@ -5,10 +5,13 @@ package dk.turnipsoft.discogsparser.model
  */
 class Release {
     String releaseName
-    String year
     String jsonString
     String releaseUrl
     GenreType genre
     Artist artist
+    String artistName
     Medium medium
+    int year
+    String releaseDate
+    String country
 }

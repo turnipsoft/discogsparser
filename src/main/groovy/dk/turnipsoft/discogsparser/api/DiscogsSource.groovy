@@ -12,6 +12,7 @@ public interface DiscogsSource {
     void init(Configuration configuration)
     Listing nextListing()
     boolean hasMoreListings()
+    void loadListings()
 
     Release lookupRelease(Listing listing)
 
