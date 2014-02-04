@@ -10,5 +10,6 @@ public interface ListingProcessor {
 
     void init(Configuration configuration)
     Object processListing(Listing listing)
+    void endProcessing()
 
 }

@@ -3,14 +3,17 @@
         "listingurl" : "http://api.discogs.com/users/$username/inventory",
         "releaseurl" : "http://api.discogs.com/users/$username/inventory",
         "username" : "shartvig",
-        "generatedir" : "~/discogsparser",
-        "databasename" : "discogs.db",
+        "generatedir" : "/Users/shartvig/discogsparser",
+        "databasename" : "discogs.db.json",
         "enrichers" : [ "dk.turnipsoft.discogsparser.parser.impl.enricher.ReleaseEnricher",
                         "dk.turnipsoft.discogsparser.parser.impl.enricher.GradingEnricher",
-                        "dk.turnipsoft.discogsparser.parser.impl.enricher.PriceEnricher" ],
+                        "dk.turnipsoft.discogsparser.parser.impl.enricher.DkkPriceEnricher" ],
         "persisters" : ["dk.turnipsoft.discogsparser.parser.impl.JsonListingPersister"],
-        "processors" : ["dk.turnipsoft.discogsparser.parser.impl.HtmlListingProcessor"],
-        "listingDirectory" : "listings"
+        "processors" : ["dk.turnipsoft.discogsparser.parser.impl.HtmlListingProcessor","dk.turnipsoft.discogsparser.parser.impl.processor.ErrorProcessor"],
+        "listingDirectory" : "listings",
+        "source" : "dk.turnipsoft.discogsparser.parser.impl.DiscogsSourceImpl",
+        "imageBaseUrl" : "http://s.pixogs.com/image/",
+        "turnipImageBaseUrl" : "http://turnips.dk/images/"
 
     }
 }

@@ -5,7 +5,7 @@ package dk.turnipsoft.discogsparser.model
  */
 enum GenreType {
     METAL,
-    ELECTRONICA,
+    ELECTRONIC,
     HIPHOP,
     ALTERNATIVE,
     POP,
@@ -13,7 +13,9 @@ enum GenreType {
     COMEDY,
     VARIOUS,
     SOUNDTRACK,
-    FOLK,
+    FOLK_WORLD_COUNTRY,
     WORLD,
-    JAZZ
+    JAZZ,
+    CLASSICAL,
+    SPOKEN_WORD
 }

@@ -5,6 +5,8 @@ import dk.turnipsoft.discogsparser.model.Configuration
 import dk.turnipsoft.discogsparser.model.Grading
 import dk.turnipsoft.discogsparser.model.Listing
 import dk.turnipsoft.discogsparser.model.Release
+import dk.turnipsoft.discogsparser.util.HttpUtil
+import groovy.json.JsonSlurper
 
 /**
  * Created by shartvig on 03/02/14.
@@ -21,24 +23,38 @@ class DiscogsSourceImpl implements DiscogsSource {
 
     }
 
+    void loadListings(List<Map<String, Object>> list) {
+        list.each { listing ->
+            addListingFromJson(listing)
+        }
+    }
+
     @Override
     void loadListings() {
+        String listingsUrl = configuration.listingurl.replace('$username',configuration.username)
+
+        HttpUtil httpUtil = new HttpUtil()
+        String json = httpUtil.getJSONFromURL(listingsUrl)
+        JsonSlurper slurper = new JsonSlurper()
+        Map<String, Object> result = slurper.parseText(json)
+        String nextUrl = result.get('pagination').get('urls').get('next')
+
+        loadListings(result.get('listings'))
+
+        while (nextUrl && nextUrl.length()>0) {
+            System.out.println("Fecthing next page : $nextUrl")
+            json = httpUtil.getJSONFromURL(nextUrl)
+            result = slurper.parseText(json)
+            nextUrl = result.get('pagination').get('urls').get('next')
+
+            loadListings(result.get('listings'))
+        }
 
     }
 
     @Override
-    Listing nextListing() {
-        return null
-    }
-
-    @Override
-    boolean hasMoreListings() {
-        return false
-    }
-
-    @Override
-    Release lookupRelease(Listing listing) {
-        return null
+    List<Listing> getListings() {
+        return listings
     }
 
     Listing addListingFromJson(Map<String, Object> jsonMap) {

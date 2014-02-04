@@ -10,10 +10,7 @@ import dk.turnipsoft.discogsparser.model.Release
 public interface DiscogsSource {
 
     void init(Configuration configuration)
-    Listing nextListing()
-    boolean hasMoreListings()
     void loadListings()
-
-    Release lookupRelease(Listing listing)
+    List<Listing> getListings()
 
 }

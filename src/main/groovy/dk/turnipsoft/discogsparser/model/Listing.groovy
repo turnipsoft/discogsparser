@@ -1,8 +1,12 @@
 package dk.turnipsoft.discogsparser.model
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties
+
 /**
  * Created by shartvig on 03/02/14.
  */
+
+@JsonIgnoreProperties(['imageFileName','publicImageUrl'])
 class Listing {
 
     String description
@@ -17,7 +21,19 @@ class Listing {
     boolean forSale
     String releaseUrl
     long id
+    boolean processed
+
+
+    List<String> errors = []
 
     String listingJson
+
+    boolean isForSale() {
+        return forSale
+    }
+
+    boolean isProcessed() {
+        return processed
+    }
 
 }

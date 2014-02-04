@@ -1,8 +1,11 @@
 package dk.turnipsoft.discogsparser.model
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties
+
 /**
  * Created by shartvig on 03/02/14.
  */
+@JsonIgnoreProperties(['CD','vinyl','cassette','movie','cd'])
 class Medium {
 
     ReleaseType releaseType

@@ -10,5 +10,6 @@ public interface ListingPersister {
 
     void init(Configuration configuration)
     void persistListings(List<Listing> listings)
+    List<Listing> restoreListings()
 
 }

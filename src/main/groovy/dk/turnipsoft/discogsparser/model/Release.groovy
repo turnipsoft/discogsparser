@@ -5,7 +5,7 @@ package dk.turnipsoft.discogsparser.model
  */
 class Release {
     String releaseName
-    String jsonString
+    Map<String, Object> jsonMap
     String releaseUrl
     Genre genre
     Artist artist
@@ -14,4 +14,6 @@ class Release {
     int year
     String releaseDate
     String country
+    String imageFileName
+    String publicImageUrl
 }

@@ -50,7 +50,6 @@ class HttpUtil {
         return response
     }
 
-    @Override
     String sendHttpRequest(String url, Map<String, String> params) {
         URI uri = buildUri(url, params, false)
         HttpGet httpGet = prepareHttpGet(uri)
@@ -59,7 +58,18 @@ class HttpUtil {
         return responseContent
     }
 
-    @Override
+    String getJSONFromURL(String url) {
+        URL u = new URL(url)
+        InputStream is = u.openStream();
+        int ptr = 0;
+        StringBuffer buffer = new StringBuffer();
+        while ((ptr = is.read()) != -1) {
+            buffer.append((char)ptr);
+        }
+        return buffer.toString()
+    }
+
+
     int sendHttpsRequest(String url, Map<String, String> params) {
         URI uri = buildUri(url, params, true)
         HttpGet httpGet = prepareHttpGet(uri)
@@ -68,7 +78,6 @@ class HttpUtil {
         return responseContent
     }
 
-    @Override
     int sendRequestBasicAuth(String url, Map<String, String> params, String username, String password) {
         URI uri = buildUri(url, params, true)
         HttpGet httpGet = prepareHttpGet(uri)
