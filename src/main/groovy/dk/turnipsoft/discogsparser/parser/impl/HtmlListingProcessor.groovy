@@ -15,9 +15,26 @@ class HtmlListingProcessor implements ListingProcessor {
     Configuration configuration
     Logger logger = LoggerFactory.getLogger(HtmlListingProcessor.class)
 
-    class HtmlListing {
+    class HtmlListing implements Comparable<HtmlListing> {
         Listing listing
         String listingHtml
+
+        @Override
+        int compareTo(HtmlListing htmlListing) {
+            return listing.description.compareTo(htmlListing.listing.description)
+        }
+    }
+
+    String buildHeading(String name, String href) {
+        return "<a name='$href'><h1>$name</h1><br/>"
+    }
+
+    String buildListingRow(Listing listing) {
+        return "<tr><td></td><td>$listing.description</td><td>$listing.discGradingString / $listing.sleeveGradingString</td></tr>"
+    }
+
+    String buildCDHtml() {
+
     }
 
     @Override
