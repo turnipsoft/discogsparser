@@ -24,6 +24,8 @@ class HttpUtil {
 
     private static final Log log = LogFactory.getLog(this)
 
+    String userAgent = 'TurnipDiscogsClient/1.0 +http://turniprecords.org'
+
     /**
      * Executes the given http get method.
      *
@@ -58,8 +60,67 @@ class HttpUtil {
         return responseContent
     }
 
+    byte[] getBytesFromUrl2(String url) {
+        URIBuilder uriBuilder = new URIBuilder(url)
+        URI uri = uriBuilder.build()
+        HttpGet httpGet = new HttpGet(uri)
+        httpGet.setHeader("User-Agent",userAgent)
+        HttpResponse response = httpClientExecute(httpGet, null)
+        if (response.statusLine.statusCode!=200) {
+            throw new IOException(String.valueOf(response.statusLine.statusCode))
+        } else {
+            InputStream is = response.entity.content
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream()
+            byte b
+            while ((b=is.read())!=-1) {
+                bytes.write(b)
+            }
+            bytes.close()
+            return bytes.toByteArray()
+        }
+    }
+
+    byte[] getBytesFromUrl3(String url) {
+        URIBuilder uriBuilder = new URIBuilder(url)
+        URI uri = uriBuilder.build()
+        HttpGet httpGet = new HttpGet(uri)
+        httpGet.setHeader("User-Agent",userAgent)
+        HttpResponse response = httpClientExecute(httpGet, null)
+        if (response.statusLine.statusCode!=200) {
+            throw new IOException(String.valueOf(response.statusLine.statusCode))
+        } else {
+            InputStream is = response.entity.content
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream()
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is))
+            byte b
+            while ((b=reader.read())!=-1) {
+                bytes.write(b)
+            }
+            bytes.close()
+            return bytes.toByteArray()
+        }
+    }
+
+    byte[] getBytesFromUrl(String url) {
+        URL u = new URL(url)
+        URLConnection conn = u.openConnection()
+        conn.addRequestProperty("User-Agent",
+                userAgent);
+        InputStream is = u.openStream();
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream()
+        byte b
+        while ((b=is.read())!=-1) {
+            bytes.write(b)
+        }
+        bytes.close()
+        return bytes.toByteArray()
+    }
+
     String getJSONFromURL(String url) {
         URL u = new URL(url)
+        URLConnection conn = u.openConnection()
+        conn.addRequestProperty("User-Agent",
+                userAgent);
         InputStream is = u.openStream();
         int ptr = 0;
         StringBuffer buffer = new StringBuffer();

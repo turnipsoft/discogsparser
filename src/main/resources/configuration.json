@@ -9,9 +9,11 @@
                         "dk.turnipsoft.discogsparser.parser.impl.enricher.GradingEnricher",
                         "dk.turnipsoft.discogsparser.parser.impl.enricher.DkkPriceEnricher" ],
         "persisters" : ["dk.turnipsoft.discogsparser.parser.impl.JsonListingPersister"],
-        "processors" : ["dk.turnipsoft.discogsparser.parser.impl.HtmlListingProcessor","dk.turnipsoft.discogsparser.parser.impl.processor.ErrorProcessor"],
+        "processors" : ["dk.turnipsoft.discogsparser.parser.impl.HtmlListingProcessor",
+                        "dk.turnipsoft.discogsparser.parser.impl.processor.ImageFetchProcessor",
+                        "dk.turnipsoft.discogsparser.parser.impl.processor.ErrorProcessor"],
         "listingDirectory" : "listings",
-        "source" : "dk.turnipsoft.discogsparser.parser.impl.DiscogsSourceImpl",
+        "source" : "dk.turnipsoft.discogsparser.parser.impl.FileSourceImpl",
         "imageBaseUrl" : "http://s.pixogs.com/image/",
         "turnipImageBaseUrl" : "http://turnips.dk/images/"
 
