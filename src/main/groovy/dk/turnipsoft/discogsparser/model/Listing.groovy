@@ -22,6 +22,7 @@ class Listing {
     String releaseUrl
     long id
     boolean processed
+    String catalogNo
 
 
     List<String> errors = []

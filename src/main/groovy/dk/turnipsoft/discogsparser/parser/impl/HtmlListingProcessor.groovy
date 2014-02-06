@@ -2,6 +2,7 @@ package dk.turnipsoft.discogsparser.parser.impl
 
 import dk.turnipsoft.discogsparser.api.ListingProcessor
 import dk.turnipsoft.discogsparser.model.Configuration
+import dk.turnipsoft.discogsparser.model.Genre
 import dk.turnipsoft.discogsparser.model.GenreType
 import dk.turnipsoft.discogsparser.model.Listing
 import org.slf4j.Logger
@@ -14,6 +15,8 @@ class HtmlListingProcessor implements ListingProcessor {
 
     Configuration configuration
     Logger logger = LoggerFactory.getLogger(HtmlListingProcessor.class)
+    int counter = 0
+    boolean white = false
 
     class HtmlListing implements Comparable<HtmlListing> {
         Listing listing
@@ -29,8 +32,10 @@ class HtmlListingProcessor implements ListingProcessor {
         return "<a name='$href'><h1>$name</h1><br/>"
     }
 
-    String buildListingRow(Listing listing) {
-        return "<tr><td></td><td>$listing.description</td><td>$listing.discGradingString / $listing.sleeveGradingString</td></tr>"
+    String buildListingRow(Listing listing, int index, boolean isWhite) {
+        String color = isWhite ? "ffffff" : "c7e1cf"
+        int price = listing.priceDkk
+        return "<tr id='r$index' onmouseover=\"fnLoadImage('http://www.turnips.dk/images/$listing.release.imageFileName',event)\" bgcolor='$color'><td align='left' valign='top'><input type=\"checkbox\" name=\"c$index\" id=\"c$index\" /></td><td align='left' valign='top'>$listing.release.artistName</td><td align='left' valign='top'>$listing.description<br/><br/>$listing.catalogNo, $listing.release.country $listing.release.releaseDate&nbsp;<br/><br/>$listing.discGradingString / $listing.sleeveGradingString<br/><br/><font color='990000'>$listing.comment</font></td><td align='left' valign='top'>$price,-</td></tr>"
     }
 
     String buildCDHtml() {
@@ -50,8 +55,7 @@ class HtmlListingProcessor implements ListingProcessor {
     @Override
     Object processListing(Listing listing) {
         if (listing.release && listing.release.medium && listing.release.releaseName) {
-            String html = toHtml(listing)
-            HtmlListing htmlListing = new HtmlListing( ['listing':listing, 'listingHtml':html])
+            HtmlListing htmlListing = new HtmlListing( ['listing':listing, 'listingHtml':''])
             if (listing.release.medium.CD) {
                 addHtml(htmlListing, cdHtml)
             } else if (listing.release.medium.vinyl) {
@@ -69,7 +73,7 @@ class HtmlListingProcessor implements ListingProcessor {
     }
 
     void addHtml(HtmlListing htmlListing, Map<GenreType,List<HtmlListing>> map) {
-        List<HtmlListing> list = map.get(htmlListing.listing.release.genre)
+        List<HtmlListing> list = map.get(htmlListing.listing.release.genre.genreType)
         if (!list) {
             list = []
             map.put(htmlListing.listing.release.genre.genreType, list)
@@ -80,9 +84,96 @@ class HtmlListingProcessor implements ListingProcessor {
     @Override
     void endProcessing() {
         System.out.println('Doing all the processing end magic')
+        sortAll()
+        generateHtmlPages()
     }
 
     private String toHtml(Listing listing) {
         return ''
+    }
+
+    private void generateHtmlPages() {
+        writeFile('cds_for_sale.html', generateHtmlPage('CD',cdHtml))
+        writeFile('vinyls_for_sale.html', generateHtmlPage('Vinyl',cdHtml))
+        writeFile('cassettes_for_sale.html', generateHtmlPage('Cassette',cdHtml))
+        writeFile('movies_for_sale.html', generateHtmlPage('DVD',cdHtml))
+    }
+
+    private void writeFile(String filename, List<String> list) {
+        filename = configuration.generateDirectory+"/"+filename
+        PrintWriter pw = new PrintWriter(new File(filename))
+
+        list.each  {s->
+            pw.println(s)
+        }
+
+        pw.close()
+    }
+
+    private List<String> generateHtmlPage(String media, Map<GenreType, List<HtmlListing>> map) {
+        List<String> result = []
+        counter = 0
+        white = false
+        String startPage = "<form name=\"records\">" +
+                "<br/><input type=\"button\" name=\"collect\" value=\"Saml liste over plader\" onclick=\"javascript:collectRecords()\"/>\n" +
+                "<br/><h1>$media</h1>\n" +
+                "<br/>"
+
+        result.add(startPage)
+        result.addAll(generateGenre("indie",media,"Indie/Alternative",map.get(GenreType.ALTERNATIVE)))
+        result.addAll(generateGenre("electronic",media,"Elektronisk",map.get(GenreType.ELECTRONIC)))
+        result.addAll(generateGenre("metal",media,"Metal/Industrial/Hardcore",map.get(GenreType.METAL)))
+        result.addAll(generateGenre("rock",media,"Rock",map.get(GenreType.ROCK)))
+        result.addAll(generateGenre("pop",media,"Pop/Reggae/Funk/Soul/Latino",map.get(GenreType.POP)))
+        result.addAll(generateGenre("hiphop",media,"Hip Hop",map.get(GenreType.HIPHOP)))
+        result.addAll(generateGenre("folk_world_country",media,"Folk/World/Country",map.get(GenreType.FOLK_WORLD_COUNTRY)))
+        result.addAll(generateGenre("soundtrack",media,"Soundtrack",map.get(GenreType.SOUNDTRACK)))
+        result.addAll(generateGenre("various",media,"Opsamlinger",map.get(GenreType.VARIOUS)))
+        result.addAll(generateGenre("comedy",media,"Underholdning",map.get(GenreType.COMEDY)))
+        result.addAll(generateGenre("klassisk",media,"Opsamlinger",map.get(GenreType.CLASSICAL)))
+        result.addAll(generateGenre("spoken",media,"Andet",map.get(GenreType.SPOKEN_WORD)))
+
+        String endPage="<br/>\n" +
+                "<br/>\n" +
+                "<br/><input type=\"button\" name=\"collect\" value=\"Saml liste over plader\" onclick=\"javascript:collectRecords()\"/></form><script language='javascript'>maxRows=$counter</script>"
+
+        result.add(endPage)
+        return result
+
+    }
+
+    private List<String> generateGenre(String href, String prefix, String genre, List<HtmlListing> list) {
+        List<String> result = []
+
+        String intro = "<a name='$prefix$href'><h2>$genre</h2></a><br/>"
+        String table = '''<table border='0'>
+                            <tr><td><strong>-</strong></td><td><strong>Kunstner</strong></td>
+                            <td><strong>Titel/Katalog/Grading</strong></td><td><strong>Pris</strong></td></tr>'''
+        String tableEnd = '''</table>'''
+        result.add(intro)
+        result.add(table)
+
+        list.each { listing->
+            listing.listingHtml = buildListingRow(listing.listing, counter++, white)
+            white = !white
+            result.add(listing.listingHtml)
+        }
+
+        result.add(tableEnd)
+        return result
+    }
+
+    private void sortAll() {
+        sortMap(cdHtml)
+        sortMap(vinylHtml)
+        sortMap(cassetteHtml)
+        sortMap(movieHtml)
+    }
+
+    private void sortMap(Map<GenreType, List<HtmlListing>> map) {
+        map.each {entry->
+            List<HtmlListing> listings = entry.value
+            entry.value = listings.sort()
+        }
     }
 }

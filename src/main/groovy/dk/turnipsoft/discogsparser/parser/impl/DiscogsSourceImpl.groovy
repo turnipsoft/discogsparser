@@ -69,6 +69,7 @@ class DiscogsSourceImpl implements DiscogsSource {
         listing.sleeveGradingString = jsonMap.get('sleeve_condition')
         listing.discGradingString = jsonMap.get('condition')
         listing.id = jsonMap.get('id')
+        listing.catalogNo = jsonMap.get('release').get('catalog_number')
 
         listings.add(listing)
         return listing
