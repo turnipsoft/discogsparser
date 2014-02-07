@@ -69,6 +69,7 @@ class DiscogsPatcher {
             }
         }
 
+        persister.persistListings(context.allListings)
     }
 
     private List<Listing> findListings(String url, List<Listing> allListings) {
