@@ -35,7 +35,16 @@ class HtmlListingProcessor implements ListingProcessor {
     String buildListingRow(Listing listing, int index, boolean isWhite) {
         String color = isWhite ? "ffffff" : "c7e1cf"
         int price = listing.priceDkk
-        return "<tr id='r$index' onmouseover=\"fnLoadImage('http://www.turnips.dk/images/$listing.release.imageFileName',event)\" bgcolor='$color'><td align='left' valign='top'><input type=\"checkbox\" name=\"c$index\" id=\"c$index\" /></td><td align='left' valign='top'>$listing.release.artistName</td><td align='left' valign='top'>$listing.description<br/><br/>$listing.catalogNo, $listing.release.country $listing.release.releaseDate&nbsp;<br/><br/>$listing.discGradingString / $listing.sleeveGradingString<br/><br/><font color='990000'>$listing.comment</font></td><td align='left' valign='top'>$price,-</td></tr>"
+        String desc = cutDescription(listing.description)
+        return "<tr id='r$index' onmouseover=\"fnLoadImage('http://www.turnips.dk/images/$listing.release.imageFileName',event)\" bgcolor='$color'><td align='left' valign='top'><input type=\"checkbox\" name=\"c$index\" id=\"c$index\" /></td><td align='left' valign='top'>$listing.release.artistName</td><td align='left' valign='top'>$desc<br/><br/>$listing.catalogNo, $listing.release.country $listing.release.releaseDate&nbsp;<br/><br/>$listing.discGradingString / $listing.sleeveGradingString<br/><br/><font color='990000'>$listing.comment</font></td><td align='left' valign='top'>$price,-</td></tr>"
+    }
+
+    String cutDescription(String description) {
+        String s = description.substring(description.indexOf("- ")+2)
+        if (s.length() > 150) {
+            s = s.substring(0,149)+"..."
+        }
+        return s
     }
 
     String buildCDHtml() {
@@ -94,9 +103,9 @@ class HtmlListingProcessor implements ListingProcessor {
 
     private void generateHtmlPages() {
         writeFile('cds_for_sale.html', generateHtmlPage('CD',cdHtml))
-        writeFile('vinyls_for_sale.html', generateHtmlPage('Vinyl',cdHtml))
-        writeFile('cassettes_for_sale.html', generateHtmlPage('Cassette',cdHtml))
-        writeFile('movies_for_sale.html', generateHtmlPage('DVD',cdHtml))
+        writeFile('vinyls_for_sale.html', generateHtmlPage('Vinyl',vinylHtml))
+        writeFile('cassettes_for_sale.html', generateHtmlPage('Cassette',cassetteHtml))
+        writeFile('movies_for_sale.html', generateHtmlPage('DVD',movieHtml))
     }
 
     private void writeFile(String filename, List<String> list) {
@@ -154,9 +163,13 @@ class HtmlListingProcessor implements ListingProcessor {
         result.add(table)
 
         list.each { listing->
-            listing.listingHtml = buildListingRow(listing.listing, counter++, white)
-            white = !white
-            result.add(listing.listingHtml)
+            if (listing.listing.release) {
+                listing.listingHtml = buildListingRow(listing.listing, counter++, white)
+                white = !white
+                result.add(listing.listingHtml)
+            } else {
+                logger.debug("Unable to generate HTML for $listing.listing.description, no release info")
+            }
         }
 
         result.add(tableEnd)

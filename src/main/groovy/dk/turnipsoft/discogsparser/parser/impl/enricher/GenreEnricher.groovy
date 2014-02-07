@@ -20,6 +20,11 @@ class GenreEnricher implements ListingEnricher {
 
     @Override
     void enrich(Listing listing, Context context) {
+        if (!listing.release) {
+            listing.errors.add('no release information :'+listing.releaseUrl)
+            return
+        }
+
         if (listing.release.genre.genreType!=GenreType.ALTERNATIVE ||
             listing.release.genre.genreType!=GenreType.METAL || listing.release.genre.genreType!=GenreType.POP) {
 
@@ -62,12 +67,12 @@ class GenreEnricher implements ListingEnricher {
     }
 
     public boolean overrideMainGenre(Listing listing, String genre) {
-        if (genre.toLowerCase() in ['shoegaze','artrock','art rock','shoegazer','post rock','grunge','indie','new wave', 'indie rock','brit pop', 'alternative','punk','lo-fi','alternative rock']) {
+        if (genre.toLowerCase() in ['shoegaze','artrock','art rock','shoegazer','goth rock','garage','post rock','grunge','indie','new wave', 'indie rock','brit pop', 'alternative','punk','lo-fi','alternative rock']) {
             listing.release.genre.genreType = GenreType.ALTERNATIVE
             return true
         } else if (genre.toLowerCase() in ['electronic','dubstep','chillwave','electro','minimal']) {
             listing.release.genre.genreType = GenreType.ELECTRONIC
-        } else if (genre.toLowerCase() in ['metal','heavy metal','speed metal','post metal','trash','thrash','nu metal','black metal','industrial','hardcore','doom metal','grindcore', 'death metal', 'hard rock']) {
+        } else if (genre.toLowerCase() in ['metal','heavy metal','speed metal','viking metal', 'post metal','trash','thrash','nu metal','black metal','industrial','hardcore','doom metal','grindcore', 'death metal', 'hard rock']) {
             listing.release.genre.genreType = GenreType.METAL
             return true
         }

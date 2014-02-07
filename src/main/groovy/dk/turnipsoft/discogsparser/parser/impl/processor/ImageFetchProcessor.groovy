@@ -71,8 +71,10 @@ class ImageFetchProcessor implements ListingProcessor {
 
     @Override
     Object processListing(Listing listing) {
-        if (listing.release.imageFileName && !fileExists(listing.release.imageFileName)) {
-            fetchFile(listing.release.imageFileName, listing)
+        if (listing.release) {
+            if (listing.release.imageFileName && !fileExists(listing.release.imageFileName)) {
+                fetchFile(listing.release.imageFileName, listing)
+            }
         }
     }
 

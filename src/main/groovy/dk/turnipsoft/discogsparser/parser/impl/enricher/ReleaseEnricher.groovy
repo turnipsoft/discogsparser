@@ -125,7 +125,13 @@ class ReleaseEnricher implements ListingEnricher {
             release.releaseName = jsonMap.get('title')
             release.year = jsonMap.get('year')
             release.releaseDate = jsonMap.get('released')
+            if (!release.releaseDate) {
+                release.releaseDate = release.year
+            }
             release.artistName = jsonMap.get('artists').get(0).get('name')
+            if (release.artistName && release.artistName.endsWith(')')) {
+                release.artistName = release.artistName.substring(0,release.artistName.lastIndexOf('(')-1)
+            }
             Genre genre = Genre.getGenreType(jsonMap)
             release.genre = genre
             release.country = jsonMap.get('country')
