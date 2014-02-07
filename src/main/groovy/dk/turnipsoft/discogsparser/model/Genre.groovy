@@ -18,7 +18,7 @@ class Genre {
                 return
             }
 
-            if (genre.toLowerCase() in ['shoegaze', 'alternative', 'indie']) {
+            if (genre.toLowerCase() in ['shoegaze', 'shoegazer', 'alternative', 'indie']) {
                 theGenre.genreType = GenreType.ALTERNATIVE
             } else if (genre.toLowerCase() in ['rock','blues']) {
                 theGenre.genreType = GenreType.ROCK

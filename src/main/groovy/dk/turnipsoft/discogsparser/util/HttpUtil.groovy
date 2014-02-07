@@ -15,6 +15,8 @@ import org.apache.http.impl.client.BasicCredentialsProvider
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClientBuilder
 
+import java.nio.charset.Charset
+
 /**
  * Created by shartvig on 03/02/14.
  */
@@ -127,7 +129,9 @@ class HttpUtil {
         while ((ptr = is.read()) != -1) {
             buffer.append((char)ptr);
         }
-        return buffer.toString()
+        String s = buffer.toString()
+        s = new String(s.getBytes(),'UTF-8' )
+        return s
     }
 
 

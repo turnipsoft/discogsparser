@@ -96,10 +96,19 @@ class Configuration {
         Properties properties = loadProperties('genre.properties')
         properties.propertyNames().each { name ->
             String value = properties.getProperty(name)
-            name = name.replace('_',' ').replace('.','').replace(',','').replace('-','').replace('\'','')
+            name = getGenreName(name)
             GenreType genreType = GenreType.valueOf(value)
             genreOverride.put(name, genreType)
         }
+    }
+
+    private String getGenreName(String name) {
+        name = name.replace('_', ' ').replace('.', '').replace(',', '').replace('-', '').replace('\'', '').replace('/','').replace('&','').replace('*','')
+        name
+    }
+
+    public GenreType getGenreOverride(String artistName) {
+        return genreOverride.get(getGenreName(artistName))
     }
 
 }

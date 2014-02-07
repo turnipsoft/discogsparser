@@ -6,14 +6,15 @@
         "generatedir" : "/Users/shartvig/discogsparser",
         "databasename" : "discogs.db.json",
         "enrichers" : [ "dk.turnipsoft.discogsparser.parser.impl.enricher.ReleaseEnricher",
-                        "dk.turnipsoft.discogsparser.parser.impl.enricher.GradingEnricher",
+                        "dk.turnipsoft.discogsparser.parser.impl.enricher.ArtistEnricher",
+                        "dk.turnipsoft.discogsparser.parser.impl.enricher.GenreEnricher",
                         "dk.turnipsoft.discogsparser.parser.impl.enricher.DkkPriceEnricher" ],
         "persisters" : ["dk.turnipsoft.discogsparser.parser.impl.JsonListingPersister"],
         "processors" : ["dk.turnipsoft.discogsparser.parser.impl.HtmlListingProcessor",
                         "dk.turnipsoft.discogsparser.parser.impl.processor.ImageFetchProcessor",
                         "dk.turnipsoft.discogsparser.parser.impl.processor.ErrorProcessor"],
         "listingDirectory" : "listings",
-        "source" : "dk.turnipsoft.discogsparser.parser.impl.FileSourceImpl",
+        "source" : "dk.turnipsoft.discogsparser.parser.impl.DiscogsSourceImpl",
         "imageBaseUrl" : "http://s.pixogs.com/image/",
         "turnipImageBaseUrl" : "http://turnips.dk/images/"
 
