@@ -6,6 +6,8 @@ import dk.turnipsoft.discogsparser.api.ListingPersister
 import dk.turnipsoft.discogsparser.api.ListingProcessor
 import dk.turnipsoft.discogsparser.util.ClasspathLoader
 import groovy.json.JsonSlurper
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Created by shartvig on 03/02/14.
@@ -26,7 +28,10 @@ class Configuration {
     List<ListingProcessor> processors
     List<ListingPersister> persisters
     Map<String,GenreType> genreOverride = [:]
+    String patchFolder
     DiscogsSource source
+
+    Logger logger = LoggerFactory.getLogger(Configuration.class)
 
     public Configuration() {
         this('configuration.json')
@@ -47,6 +52,7 @@ class Configuration {
         this.listingDirectory = configMap.get('listingDirectory')
         this.imageBaseUrl = configMap.get('imageBaseUrl')
         this.turnipImageBaseUrl = configMap.get('turnipImageBaseUrl')
+        this.patchFolder = configMap.get('patchFolder')
 
         List<String> list = configMap.get('enrichers')
         this.enrichers = []
@@ -97,8 +103,12 @@ class Configuration {
         properties.propertyNames().each { name ->
             String value = properties.getProperty(name)
             name = getGenreName(name)
-            GenreType genreType = GenreType.valueOf(value)
-            genreOverride.put(name, genreType)
+            try {
+                GenreType genreType = GenreType.valueOf(value)
+                genreOverride.put(name, genreType)
+            } catch (IllegalArgumentException iae) {
+                logger.error("Failed property $name - $value.")
+            }
         }
     }
 

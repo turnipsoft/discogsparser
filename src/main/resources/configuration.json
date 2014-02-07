@@ -15,6 +15,7 @@
         "listingDirectory" : "listings",
         "source" : "dk.turnipsoft.discogsparser.parser.impl.DiscogsSourceImpl",
         "imageBaseUrl" : "http://s.pixogs.com/image/",
+        "patchFolder" : "patches",
         "turnipImageBaseUrl" : "http://turnips.dk/images/"
 
     }
