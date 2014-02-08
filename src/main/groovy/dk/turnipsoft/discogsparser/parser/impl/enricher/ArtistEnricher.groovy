@@ -24,9 +24,7 @@ class ArtistEnricher implements ListingEnricher {
         if (listing.release) {
             String artistName = listing.release.jsonMap.get('artists').get(0).get('name')
             if (artistName.endsWith(")") && !artistName.startsWith("Sunn")) {
-                logger.debug("changing artist name from : "+artistName)
                 artistName = artistName.substring(0,artistName.lastIndexOf("(")-1);
-                logger.debug("to : $artistName")
             }
             listing.release.artistName = artistName
         }

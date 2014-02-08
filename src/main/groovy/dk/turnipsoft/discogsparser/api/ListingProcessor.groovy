@@ -1,6 +1,7 @@
 package dk.turnipsoft.discogsparser.api
 
 import dk.turnipsoft.discogsparser.model.Configuration
+import dk.turnipsoft.discogsparser.model.Context
 import dk.turnipsoft.discogsparser.model.Listing
 
 /**
@@ -10,6 +11,6 @@ public interface ListingProcessor {
 
     void init(Configuration configuration)
     Object processListing(Listing listing)
-    void endProcessing()
+    void endProcessing(Context context)
 
 }

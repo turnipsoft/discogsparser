@@ -30,6 +30,7 @@ class Configuration {
     Map<String,GenreType> genreOverride = [:]
     String patchFolder
     DiscogsSource source
+    Properties artistSalesList = new HashSet<String>()
 
     Logger logger = LoggerFactory.getLogger(Configuration.class)
 
@@ -86,6 +87,7 @@ class Configuration {
         this.source = sourceClazz.newInstance()
         this.source.init(this)
 
+        this.artistSalesList = loadProperties(configMap.get('saleslist'))
 
         loadGenres()
     }
@@ -112,7 +114,7 @@ class Configuration {
         }
     }
 
-    private String getGenreName(String name) {
+    public static String getGenreName(String name) {
         name = name.replace('_', ' ').replace('.', '').replace(',', '').replace('-', '').replace('\'', '').replace('/','').replace('&','').replace('*','')
         name
     }

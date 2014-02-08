@@ -11,12 +11,15 @@
                         "dk.turnipsoft.discogsparser.parser.impl.enricher.DkkPriceEnricher" ],
         "persisters" : ["dk.turnipsoft.discogsparser.parser.impl.JsonListingPersister"],
         "processors" : ["dk.turnipsoft.discogsparser.parser.impl.HtmlListingProcessor",
+                        "dk.turnipsoft.discogsparser.parser.impl.processor.ImageFetchProcessor",
+                        "dk.turnipsoft.discogsparser.parser.impl.processor.GenreInspirationProcessor",
                         "dk.turnipsoft.discogsparser.parser.impl.processor.ErrorProcessor"],
         "listingDirectory" : "listings",
         "source" : "dk.turnipsoft.discogsparser.parser.impl.DiscogsSourceImpl",
         "imageBaseUrl" : "http://s.pixogs.com/image/",
         "patchFolder" : "patches",
-        "turnipImageBaseUrl" : "http://turnips.dk/images/"
+        "turnipImageBaseUrl" : "http://turnips.dk/images/",
+        "saleslist" : "saleslists.properties"
 
     }
 }

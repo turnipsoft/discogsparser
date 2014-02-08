@@ -49,7 +49,7 @@ class DiscogsParser {
         // process
         status('End Processing')
         configuration.processors.each { processor->
-            processor.endProcessing()
+            processor.endProcessing(context)
         }
 
         // persist

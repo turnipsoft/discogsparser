@@ -2,6 +2,7 @@ package dk.turnipsoft.discogsparser.parser.impl.processor
 
 import dk.turnipsoft.discogsparser.api.ListingProcessor
 import dk.turnipsoft.discogsparser.model.Configuration
+import dk.turnipsoft.discogsparser.model.Context
 import dk.turnipsoft.discogsparser.model.Listing
 
 /**
@@ -24,7 +25,7 @@ class ErrorProcessor implements ListingProcessor{
     }
 
     @Override
-    void endProcessing() {
+    void endProcessing(Context context) {
         listingsInError.each { listing->
             System.out.println("listing in error : $listing.description")
             listing.errors.each { error ->

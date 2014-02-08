@@ -2,9 +2,11 @@ package dk.turnipsoft.discogsparser.parser.impl
 
 import dk.turnipsoft.discogsparser.api.ListingProcessor
 import dk.turnipsoft.discogsparser.model.Configuration
+import dk.turnipsoft.discogsparser.model.Context
 import dk.turnipsoft.discogsparser.model.Genre
 import dk.turnipsoft.discogsparser.model.GenreType
 import dk.turnipsoft.discogsparser.model.Listing
+import dk.turnipsoft.discogsparser.util.FileUtil
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -36,7 +38,11 @@ class HtmlListingProcessor implements ListingProcessor {
         String color = isWhite ? "ffffff" : "c7e1cf"
         int price = listing.priceDkk
         String desc = cutDescription(listing.description)
-        return "<tr id='r$index' onmouseover=\"fnLoadImage('http://www.turnips.dk/images/$listing.release.imageFileName',event)\" bgcolor='$color'><td align='left' valign='top'><input type=\"checkbox\" name=\"c$index\" id=\"c$index\" /></td><td align='left' valign='top'>$listing.release.artistName</td><td align='left' valign='top'>$desc<br/><br/>$listing.catalogNo, $listing.release.country $listing.release.releaseDate&nbsp;<br/><br/>$listing.discGradingString / $listing.sleeveGradingString<br/><br/><font color='990000'>$listing.comment</font></td><td align='left' valign='top'>$price,-</td></tr>"
+        String imageUrl = ''
+        if (listing.release.imageFileName)
+            imageUrl = (listing.release.imageFileName.endsWith('jpeg') || listing.release.imageFileName.endsWith(('jpg'))) ? "http://www.turnips.dk/images/jpeg-small/$listing.release.imageFileName" : "http://www.turnips.dk/images/$listing.release.imageFileName"
+        //return "<tr id='r$index' onmouseover=\"fnLoadImage('http://www.turnips.dk/images/$listing.release.imageFileName',event)\" bgcolor='$color'><td align='left' valign='top'><input type=\"checkbox\" name=\"c$index\" id=\"c$index\" /></td><td align='left' valign='top'>$listing.release.artistName</td><td align='left' valign='top'>$desc<br/><br/>$listing.catalogNo, $listing.release.country $listing.release.releaseDate&nbsp;<br/><br/>$listing.discGradingString / $listing.sleeveGradingString<br/><br/><font color='990000'>$listing.comment</font></td><td align='left' valign='top'>$price,-</td></tr>"
+        return "<tr id='r$index' bgcolor='$color'><td align='left' valign='top'><input type=\"checkbox\" name=\"c$index\" id=\"c$index\" /></td><td align='left' valign='top'><img border='no' src='$imageUrl' /></td><td align='left' valign='top'>$listing.release.artistName</td><td align='left' valign='top'>$desc<br/><br/>$listing.catalogNo, $listing.release.country $listing.release.releaseDate&nbsp;<br/><br/>$listing.discGradingString / $listing.sleeveGradingString<br/><br/><font color='990000'>$listing.comment</font></td><td align='left' valign='top'>$price,-</td></tr>"
     }
 
     String cutDescription(String description) {
@@ -91,10 +97,11 @@ class HtmlListingProcessor implements ListingProcessor {
     }
 
     @Override
-    void endProcessing() {
+    void endProcessing(Context context) {
         System.out.println('Doing all the processing end magic')
         sortAll()
         generateHtmlPages()
+        context.htmlListingProcessor = this
     }
 
     private String toHtml(Listing listing) {
@@ -110,13 +117,7 @@ class HtmlListingProcessor implements ListingProcessor {
 
     private void writeFile(String filename, List<String> list) {
         filename = configuration.generateDirectory+"/"+filename
-        PrintWriter pw = new PrintWriter(new File(filename))
-
-        list.each  {s->
-            pw.println(s)
-        }
-
-        pw.close()
+        FileUtil.writeFile(filename, list)
     }
 
     private List<String> generateHtmlPage(String media, Map<GenreType, List<HtmlListing>> map) {
@@ -155,8 +156,11 @@ class HtmlListingProcessor implements ListingProcessor {
         List<String> result = []
 
         String intro = "<a name='$prefix$href'><h2>$genre</h2></a><br/>"
+        //String table = '''<table border='0'>
+        //                    <tr><td><strong>-</strong></td><td><strong>Kunstner</strong></td>
+        //                    <td><strong>Titel/Katalog/Grading</strong></td><td><strong>Pris</strong></td></tr>'''
         String table = '''<table border='0'>
-                            <tr><td><strong>-</strong></td><td><strong>Kunstner</strong></td>
+                            <tr><td><strong>-</strong></td><td>&nbsp;</td><td><strong>Kunstner</strong></td>
                             <td><strong>Titel/Katalog/Grading</strong></td><td><strong>Pris</strong></td></tr>'''
         String tableEnd = '''</table>'''
         result.add(intro)

@@ -2,6 +2,7 @@ package dk.turnipsoft.discogsparser.parser.impl.processor
 
 import dk.turnipsoft.discogsparser.api.ListingProcessor
 import dk.turnipsoft.discogsparser.model.Configuration
+import dk.turnipsoft.discogsparser.model.Context
 import dk.turnipsoft.discogsparser.model.Listing
 import dk.turnipsoft.discogsparser.util.HttpUtil
 
@@ -48,7 +49,7 @@ class ImageFetchProcessor implements ListingProcessor {
         String fullFilename = "$configuration.generateDirectory/$imageDir/$filename"
 
         if (filename) {
-            System.out.println("fetching image : $filename for listing: $listing.description")
+            //System.out.println("fetching image : $filename for listing: $listing.description")
             try {
                 byte[] imageBytes = httpUtil.getBytesFromUrl(configuration.imageBaseUrl+filename)
                 File f = new File(fullFilename)
@@ -56,7 +57,7 @@ class ImageFetchProcessor implements ListingProcessor {
                 dos.write(imageBytes)
                 dos.close()
             } catch (IOException ioe) {
-                System.out.println("Can't fetch image: "+ioe.message)
+                //System.out.println("Can't fetch image: "+ioe.message)
                 listing.errors.add('Unable to fetch image:'+configuration.imageBaseUrl+filename)
                 curls << "curl $configuration.imageBaseUrl$filename > $fullFilename"
             }
@@ -79,7 +80,7 @@ class ImageFetchProcessor implements ListingProcessor {
     }
 
     @Override
-    void endProcessing() {
+    void endProcessing(Context context) {
         System.out.println("missed out "+curls.size() + " images, so making a curl script for those")
         writeCurlFile()
     }
