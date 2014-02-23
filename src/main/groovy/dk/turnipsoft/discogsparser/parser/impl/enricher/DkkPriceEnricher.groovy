@@ -24,10 +24,26 @@ class DkkPriceEnricher implements ListingEnricher {
         int dkkPrice = listing.getPriceEur() * dkk
         if (dkkPrice<10) {
             dkkPrice = 5
+        } else if (dkkPrice<15) {
+            dkkPrice=10
+        } else if (dkkPrice<20) {
+            dkkPrice=15
+        } else if (dkkPrice>=20 && dkkPrice<30) {
+            dkkPrice = 25
+        } else if (dkkPrice>=30 && dkkPrice<35) {
+            dkkPrice = 30
+        } else if (dkkPrice>=35 && dkkPrice<45) {
+            dkkPrice = 40
+        } else if (dkkPrice>=45 && dkkPrice<60) {
+            dkkPrice = 50
         } else {
-            dkkPrice = dkkPrice - (dkkPrice % 10)
+            dkkPrice = roundUp(dkkPrice, 10)
         }
 
         listing.setPriceDkk(dkkPrice)
+    }
+
+    int roundUp(int num, double nearest) {
+        return (int) (Math.ceil(num / nearest) * nearest);
     }
 }

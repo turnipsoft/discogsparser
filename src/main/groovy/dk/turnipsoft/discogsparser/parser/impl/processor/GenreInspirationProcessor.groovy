@@ -86,7 +86,6 @@ class GenreInspirationProcessor implements ListingProcessor {
             List<HtmlListingProcessor.HtmlListing> foundListings = listings.findAll({ it.listing.release && configuration.getGenreName(it.listing.release.artistName)==configuration.getGenreName(artistName) } )
             foundListings.each {
                 Listing listing = it.listing
-                System.out.println("Adding $listing.description to sales list")
                 int price = listing.priceDkk
                 String desc = context.htmlListingProcessor.cutDescription(listing.description)
                 salesLines << "$desc     $listing.discGradingString / $listing.sleeveGradingString      $price,-\n"
