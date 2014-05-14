@@ -26,7 +26,9 @@ class HttpUtil {
 
     private static final Log log = LogFactory.getLog(this)
 
-    String userAgent = 'TurnipDiscogsClient/1.0 +http://turniprecords.org'
+    //String userAgent = 'PladerDiscogsReader/1.0 +http://plader.nu'
+
+    String userAgent = 'curl/7.30.0'
 
     /**
      * Executes the given http get method.
@@ -58,8 +60,18 @@ class HttpUtil {
         URI uri = buildUri(url, params, false)
         HttpGet httpGet = prepareHttpGet(uri)
         HttpResponse response = httpClientExecute(httpGet, null)
-        String responseContent = response.entity.content.getText(Consts.UTF_8.toString())
+        String responseContent = readContent(response.entity.content)
         return responseContent
+    }
+
+    String readContent(InputStream i) {
+        BufferedReader br = new BufferedReader(new InputStreamReader(i))
+        String s = null
+        StringBuffer b = new StringBuffer()
+        while ((s=br.readLine())!=null) {
+            b.append(s)
+        }
+        return b.toString()
     }
 
     byte[] getBytesFromUrl2(String url) {
@@ -104,6 +116,8 @@ class HttpUtil {
     }
 
     byte[] getBytesFromUrl(String url) {
+        Thread.sleep(1000)
+
         URL u = new URL(url)
         URLConnection conn = u.openConnection()
         conn.addRequestProperty("User-Agent",
@@ -119,10 +133,11 @@ class HttpUtil {
     }
 
     String getJSONFromURL(String url) {
+        Thread.sleep(1000)
         URL u = new URL(url)
         URLConnection conn = u.openConnection()
-        conn.addRequestProperty("User-Agent",
-                userAgent);
+        addHeaders(conn)
+
         InputStream is = u.openStream();
         int ptr = 0;
         StringBuffer buffer = new StringBuffer();
@@ -132,6 +147,21 @@ class HttpUtil {
         String s = buffer.toString()
         s = new String(s.getBytes(),'UTF-8' )
         return s
+    }
+
+    private void addHeaders(URLConnection conn) {
+        //userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:27.0) Gecko/20100101 Firefox/27.0"
+
+        conn.addRequestProperty("User-Agent",
+                userAgent);
+        //conn.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+        /*conn.addRequestProperty("Accept-Encoding", "gzip,deflate")
+        conn.addRequestProperty("Pragma", "no-cache")
+        conn.addRequestProperty("Cache-Control", "no-cache")
+        conn.addRequestProperty("Accept-Language","en-US,en;q=0.5")
+        conn.addRequestProperty("Host", "api.discogs.com")
+        conn.addRequestProperty("Cookie", "sid=8eb952a5a718defda61b8b06759143a9; __utma=15419939.1274148246.1365163038.1391704993.1393137793.18; __utmz=15419939.1365163038.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _ga=GA1.2.1274148246.1365163038; __gads=ID=62c6889a10935f48:T=1365163038:S=ALNI_MZTm79_-2oohAttsx_rJ-nkqUeHFA; mp_session=061f28051f9f18049f22dd2b; ck_username=shartvig")
+        */
     }
 
 
@@ -168,6 +198,10 @@ class HttpUtil {
                 .setConnectionRequestTimeout(10000)
                 .build()
         HttpGet httpGet = new HttpGet(uri)
+        httpGet.addHeader("UserAgent", "discogsparser1.0")
+        httpGet.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+        httpGet.addHeader("Accept-Encoding", "gzip, deflate")
+        httpGet.addHeader("Host", "api.discogs.com")
         httpGet.config = requestConfig
         return httpGet
     }
@@ -191,5 +225,37 @@ class HttpUtil {
             uriBuilder.addParameter(parameterName, value)
         }
         uriBuilder.build()
+    }
+
+    public static void main(String []args) {
+
+        HttpUtil hu = new HttpUtil()
+
+        //String result = hu.sendHttpRequest("http://api.discogs.com/releases/1395980",[:])
+        String result = hu.getJSONFromURL("http://api.discogs.com/releases/1395980")
+    }
+
+    public String getJsonWithWget(String url) {
+        Runtime rt = Runtime.getRuntime();
+        String command = "wget $url -O /tmp/result.json"
+        System.out.println("invoking $command")
+        Process ps = rt.exec(command);
+        ps.waitFor()
+        System.out.println("ps endded with "+ps.exitValue())
+        System.out.println(ps.inputStream.text)
+        System.out.println(ps.err.text)
+
+        return readFile("/tmp/result.json")
+    }
+
+    private String readFile(String filename) {
+        BufferedReader br = new BufferedReader(new FileReader(filename))
+        String line = null
+        StringBuffer buf = new StringBuffer()
+        while ((line = br.readLine()) != null) {
+            buf.append(line)
+        }
+
+        return buf.toString()
     }
 }

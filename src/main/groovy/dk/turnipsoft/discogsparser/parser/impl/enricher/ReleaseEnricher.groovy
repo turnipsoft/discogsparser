@@ -34,7 +34,8 @@ class ReleaseEnricher implements ListingEnricher {
 
     public Map<String, Object> getJSON(String url) {
         HttpUtil h = new HttpUtil()
-        String jsonString = h.getJSONFromURL(url)
+        Thread.sleep(1000)
+        String jsonString = h.getJsonWithWget(url)
         JsonSlurper jsonSlurper = new JsonSlurper()
         return jsonSlurper.parseText(jsonString)
     }

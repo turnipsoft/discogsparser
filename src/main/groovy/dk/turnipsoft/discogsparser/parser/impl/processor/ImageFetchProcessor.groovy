@@ -47,6 +47,10 @@ class ImageFetchProcessor implements ListingProcessor {
     private void fetchFile(String filename, Listing listing) {
 
         String fullFilename = "$configuration.generateDirectory/$imageDir/$filename"
+        curls << "sleep 2"
+        curls << "wget $configuration.imageBaseUrl$filename -O $fullFilename"
+
+        return
 
         if (filename) {
             //System.out.println("fetching image : $filename for listing: $listing.description")
@@ -74,6 +78,7 @@ class ImageFetchProcessor implements ListingProcessor {
     Object processListing(Listing listing) {
         if (listing.release) {
             if (listing.release.imageFileName && !fileExists(listing.release.imageFileName)) {
+                System.out.println("go get file : "+listing.release.imageFileName)
                 fetchFile(listing.release.imageFileName, listing)
             }
         }

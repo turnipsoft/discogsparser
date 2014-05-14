@@ -13,6 +13,7 @@
         "processors" : ["dk.turnipsoft.discogsparser.parser.impl.HtmlListingProcessor",
                         "dk.turnipsoft.discogsparser.parser.impl.processor.ImageFetchProcessor",
                         "dk.turnipsoft.discogsparser.parser.impl.processor.GenreInspirationProcessor",
+                        "dk.turnipsoft.discogsparser.parser.impl.processor.GenreArtistListProcessor",
                         "dk.turnipsoft.discogsparser.parser.impl.processor.ErrorProcessor"],
         "listingDirectory" : "listings",
         "source" : "dk.turnipsoft.discogsparser.parser.impl.DiscogsSourceImpl",

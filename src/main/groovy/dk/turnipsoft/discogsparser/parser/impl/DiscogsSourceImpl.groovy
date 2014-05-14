@@ -34,7 +34,9 @@ class DiscogsSourceImpl implements DiscogsSource {
         String listingsUrl = configuration.listingurl.replace('$username',configuration.username)
 
         HttpUtil httpUtil = new HttpUtil()
-        String json = httpUtil.getJSONFromURL(listingsUrl)
+        String json = httpUtil.getJsonWithWget(listingsUrl)
+        //String json = httpUtil.getJSONFromURL(listingsUrl)
+
         JsonSlurper slurper = new JsonSlurper()
         Map<String, Object> result = slurper.parseText(json)
         String nextUrl = result.get('pagination').get('urls').get('next')
@@ -43,7 +45,7 @@ class DiscogsSourceImpl implements DiscogsSource {
 
         while (nextUrl && nextUrl.length()>0) {
             System.out.println("Fecthing next page : $nextUrl")
-            json = httpUtil.getJSONFromURL(nextUrl)
+            json = httpUtil.getJsonWithWget(nextUrl)
             result = slurper.parseText(json)
             nextUrl = result.get('pagination').get('urls').get('next')
 

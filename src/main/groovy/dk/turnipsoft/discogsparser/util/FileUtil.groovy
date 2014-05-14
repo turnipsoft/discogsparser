@@ -15,4 +15,13 @@ class FileUtil {
 
         pw.close()
     }
+
+    public static void writeFile(String filename, StringBuffer list) {
+        filename = filename
+        PrintWriter pw = new PrintWriter(new File(filename))
+
+        pw.println(list.toString())
+
+        pw.close()
+    }
 }
