@@ -34,9 +34,14 @@ class GenreArtistListProcessor implements ListingProcessor {
 
     @Override
     Object processListing(Listing listing) {
-        StringBuffer buffer = getGenreArtistBuffer(listing.release.genre.genreType, listing.release.medium.masterReleaseType)
-        if (!buffer.contains(listing.release.artistName) && listing.release.artistName!='Various') {
-            buffer.append(", "+listing.release.artistName+ "\n")
+
+        try {
+            StringBuffer buffer = getGenreArtistBuffer(listing.release.genre.genreType, listing.release.medium.masterReleaseType)
+            if (!buffer.contains(listing.release.artistName) && listing.release.artistName!='Various') {
+                buffer.append(", "+listing.release.artistName+ "\n")
+            }
+        } catch(Exception e) {
+            System.out.println("TROUBLES WITH: "+listing.description+", "+listing.releaseUrl)
         }
     }
 

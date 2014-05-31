@@ -24,4 +24,32 @@ class FileUtil {
 
         pw.close()
     }
+
+    public static String readFileFromClasspath(String filename) {
+        ClasspathLoader cpLoader = new ClasspathLoader()
+        InputStream input = cpLoader.getInputStream("$filename")
+        StringBuffer buf = new StringBuffer()
+        BufferedReader br = new BufferedReader(new InputStreamReader(input))
+        String s
+
+        while ((s=br.readLine())!=null) {
+            buf.append(s+"\n");
+        }
+
+        return buf.toString()
+    }
+
+    public static String readFile(String filename) {
+
+        InputStream input = new FileInputStream("$filename")
+        StringBuffer buf = new StringBuffer()
+        BufferedReader br = new BufferedReader(new InputStreamReader(input))
+        String s
+
+        while ((s=br.readLine())!=null) {
+            buf.append(s+"\n");
+        }
+
+        return buf.toString()
+    }
 }
