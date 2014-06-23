@@ -124,8 +124,11 @@ class HtmlListingProcessor implements ListingProcessor {
         List<String> result = []
         counter = 0
         white = false
+
+        String bool = media.equals("Vinyl") ? 'true' : 'false'
+
         String startPage = "<form name=\"records\">" +
-                "<br/><input type=\"button\" name=\"collect\" value=\"Saml liste over plader\" onclick=\"javascript:collectRecords()\"/>\n" +
+                "<br/><input type=\"button\" name=\"collect\" value=\"Saml liste over plader\" onclick=\"javascript:collectRecords("+bool+")\"/>\n" +
                 "<br/><h1>$media</h1>\n" +
                 "<br/>"
 
@@ -145,7 +148,7 @@ class HtmlListingProcessor implements ListingProcessor {
 
         String endPage="<br/>\n" +
                 "<br/>\n" +
-                "<br/><input type=\"button\" name=\"collect\" value=\"Saml liste over plader\" onclick=\"javascript:collectRecords()\"/></form><script language='javascript'>maxRows=$counter</script>"
+                "<br/><input type=\"button\" name=\"collect\" value=\"Saml liste over plader\" onclick=\"javascript:collectRecords("+bool+")\"/></form><script language='javascript'>maxRows=$counter</script>"
 
         result.add(endPage)
         return result

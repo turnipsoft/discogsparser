@@ -21,9 +21,9 @@ class WorthProcessor implements ListingProcessor {
 
     @Override
     Object processListing(Listing listing) {
-        if (listing.forSale && listing.release && listing.release.medium.masterReleaseType == MasterReleaseType.CD) {
+        if (listing.release && listing.release.medium && listing.forSale && listing.release && listing.release.medium.masterReleaseType == MasterReleaseType.CD) {
             priceCd += listing.priceDkk
-        } else if (listing.forSale && listing.release && listing.release.medium.masterReleaseType == MasterReleaseType.VINYL) {
+        } else if (listing.release && listing.release.medium && listing.forSale && listing.release && listing.release.medium.masterReleaseType == MasterReleaseType.VINYL) {
             priceVinyl += listing.priceDkk
         }
     }

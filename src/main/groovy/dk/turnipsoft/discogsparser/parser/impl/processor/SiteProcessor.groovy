@@ -6,6 +6,8 @@ import dk.turnipsoft.discogsparser.model.Context
 import dk.turnipsoft.discogsparser.model.Listing
 import dk.turnipsoft.discogsparser.util.FileUtil
 
+import java.text.SimpleDateFormat
+
 /**
  * Created by shartvig on 31/05/14.
  */
@@ -58,6 +60,15 @@ class SiteProcessor implements ListingProcessor {
         FileUtil.writeFile(this.configuration.generateDirectory+"/site/$fileName", new StringBuffer(toCopy))
     }
 
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy")
+
+    private String addDate(String content) {
+        Date d = new Date()
+        String ds = simpleDateFormat.format(d)
+
+        return content.replace('$dato',ds)
+    }
+
 
     void generateSalesFile(String media ) {
         String template = 'web/'+media+'s_template.html'
@@ -70,6 +81,7 @@ class SiteProcessor implements ListingProcessor {
         String general = FileUtil.readFileFromClasspath('web/general_template.html')
 
         media = media.substring(0,1).toUpperCase() + media.substring(1)
+        body = addDate(body)
         body = body.replace('$include'+media, sales)
 
         String theFinal = general.replace('$includeBody',body)

@@ -86,7 +86,7 @@ class ReleaseEnricher implements ListingEnricher {
                 medium = new Medium(ReleaseType.CDMAXI)
             } else if (description.toLowerCase() in ['cassette']) {
                 medium = new Medium(ReleaseType.CASSETTE)
-            } else if (description.toLowerCase() in ['dvd']) {
+            } else if (description.toLowerCase() in ['dvd', 'dvdr', 'dvd-v']) {
                 medium = new Medium(ReleaseType.DVD)
             } else if (description.toLowerCase() in ['bluray']) {
                 medium = new Medium(ReleaseType.BLURAY)

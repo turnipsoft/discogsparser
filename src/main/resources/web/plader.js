@@ -83,7 +83,21 @@ function discountAmount(amount) {
     }
 
 
-    function collectRecords() {
+    function discountVinyl(price) {
+        if (price>=2000) {
+            return price * 0.8;
+        } else if (price>=1500) {
+            return price * 0.85;
+        } else if (price>=1000) {
+            return price * 0.9;
+        } else if (price>=500) {
+            return price*0.95;
+        } else {
+            return price;
+        }
+    }
+
+    function collectRecords(isVinyl) {
 
         var html='';
         var newColor = "eaeaf1";
@@ -91,30 +105,36 @@ function discountAmount(amount) {
         var bought = 0;
 
         for (i=1;i<=maxRows;i++) {
-        var chid = 'c'+i;
-        var recordid = 'r'+i;
-        var priceid = 'price'+i;
-        var ch = document.getElementById(chid);
-        if (ch!=null && ch.checked) {
-        var recordRow = document.getElementById(recordid);
-        var recordPrice = document.getElementById(priceid);
-        var price = recordPrice.innerHTML;
-        price = price.substring(0, price.length-2);
-        totalprice += parseInt(price);
-        var recordHtml = recordRow.outerHTML;
-        recordHtml = recordHtml.replace('ffffff',newColor);
-        recordHtml = recordHtml.replace('c7e1cf',newColor);
+            var chid = 'c'+i;
+            var recordid = 'r'+i;
+            var priceid = 'price'+i;
+            var ch = document.getElementById(chid);
+            if (ch!=null && ch.checked) {
+                var recordRow = document.getElementById(recordid);
+                var recordPrice = document.getElementById(priceid);
+                var price = recordPrice.innerHTML;
+                price = price.substring(0, price.length-2);
+                totalprice += parseInt(price);
+                var recordHtml = recordRow.outerHTML;
+                recordHtml = recordHtml.replace('ffffff',newColor);
+                recordHtml = recordHtml.replace('c7e1cf',newColor);
 
-        html+=recordHtml;
-        bought++;
+                html+=recordHtml;
+                bought++;
+            }
         }
-    }
 
-    var priceHtml="<br/><b>Total pris: </b>"+totalprice+",-  <b>med samlerabat "+discountAmount(bought)+" : </b>"+ Math.round(discount(bought, totalprice))+",- <br/>";
+        var priceHtml = '';
+        if (isVinyl==true) {
+            priceHtml="<br/><b>Total pris for vinyler: </b>"+totalprice+",-  <b>med prisrabat: </b>"+ Math.round(discountVinyl(totalprice))+",- <br/>";
+        } else {
+            priceHtml="<br/><b>Total pris for cder: </b>"+totalprice+",-  <b>med samlerabat "+discountAmount(bought)+" : </b>"+ Math.round(discount(bought, totalprice))+",- <br/>";
+        }
 
-    var result = '<html><head><title>Records</title><head><body><br/><table>'+html+'</table><br/>'+priceHtml+'</body></html>'
+
+        var result = '<html><head><title>Records</title><head><body><br/><table>'+html+'</table><br/>'+priceHtml+'</body></html>'
 
         var win = window.open("", "Records", "scrollbars=yes, resizable=yes");
         win.document.body.innerHTML = result;
 
-        }
+    }
