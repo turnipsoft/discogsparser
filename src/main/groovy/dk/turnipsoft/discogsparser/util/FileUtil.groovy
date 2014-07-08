@@ -1,11 +1,18 @@
 package dk.turnipsoft.discogsparser.util
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 /**
  * Created by shartvig on 08/02/14.
  */
 class FileUtil {
 
+    static Logger logger = LoggerFactory.getLogger(FileUtil.class)
+
     public static void writeFile(String filename, List<String> list) {
+
+        logger.debug("writing file $filename")
         filename = filename
         PrintWriter pw = new PrintWriter(new File(filename))
 

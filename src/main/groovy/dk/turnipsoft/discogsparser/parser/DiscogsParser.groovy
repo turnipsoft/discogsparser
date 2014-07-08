@@ -37,11 +37,20 @@ class DiscogsParser {
         source.listings.each { listing->
             // enrich
             configuration.enrichers.each { enricher->
-                enricher.enrich(listing, context)
+                try {
+                    enricher.enrich(listing, context)
+                } catch (Exception e) {
+                    logger.error("Troubles enriching $listing.description with $enricher due to $e.message")
+                }
             }
             // process
             configuration.processors.each { processor->
-                processor.processListing(listing)
+                try {
+                    processor.processListing(listing)
+                } catch (Exception e) {
+                    logger.error("Troubles processing $listing.description with $processor due to $e.message")
+                }
+
             }
         }
 
@@ -49,7 +58,11 @@ class DiscogsParser {
         // process
         status('End Processing')
         configuration.processors.each { processor->
-            processor.endProcessing(context)
+            try {
+                processor.endProcessing(context)
+            } catch (Exception e) {
+                logger.error("Troubles end processing $processor due to $e.message")
+            }
         }
 
         // persist
