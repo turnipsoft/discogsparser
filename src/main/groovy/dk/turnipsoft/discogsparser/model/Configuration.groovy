@@ -116,6 +116,9 @@ class Configuration {
 
     public static String getGenreName(String name) {
         name = name.replace('_', ' ').replace('.', '').replace(',', '').replace('-', '').replace('\'', '').replace('/','').replace('&','').replace('*','')
+        if (name.endsWith("The") && name!='The_The') {
+            name = name.replace("The","")
+        }
         name
     }
 
