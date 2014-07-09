@@ -14,7 +14,6 @@
                         "dk.turnipsoft.discogsparser.parser.impl.processor.ImageFetchProcessor",
                         "dk.turnipsoft.discogsparser.parser.impl.processor.GenreInspirationProcessor",
                         "dk.turnipsoft.discogsparser.parser.impl.processor.GenreArtistListProcessor",
-                        "dk.turnipsoft.discogsparser.parser.impl.processor.BIProcessor",
                         "dk.turnipsoft.discogsparser.parser.impl.processor.ErrorProcessor",
                         "dk.turnipsoft.discogsparser.parser.impl.processor.WorthProcessor",
                         "dk.turnipsoft.discogsparser.parser.impl.processor.SiteProcessor",
