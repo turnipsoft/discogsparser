@@ -36,6 +36,8 @@ class SiteProcessor implements ListingProcessor {
     void endProcessing(Context context) {
         generateSalesFile("cd")
         generateSalesFile("vinyl")
+        generateSalesFile("metal_cd")
+        generateSalesFile("metal_vinyl")
         generateSalesFile("cassette")
         copyContents('about.html')
         copyContents('forsendelse.html')
@@ -80,6 +82,7 @@ class SiteProcessor implements ListingProcessor {
         String sales = FileUtil.readFile(salesFile)
         String general = FileUtil.readFileFromClasspath('web/general_template.html')
 
+        media = media.replace("metal_","")
         media = media.substring(0,1).toUpperCase() + media.substring(1)
         body = addDate(body)
         body = body.replace('$include'+media, sales)

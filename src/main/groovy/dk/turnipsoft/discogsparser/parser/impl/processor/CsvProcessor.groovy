@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory
 class CsvProcessor implements ListingProcessor {
 
     org.slf4j.Logger logger = LoggerFactory.getLogger(CsvProcessor.class)
-    String csvHeader = "Band or Artist,Title,Disc Grading,Sleeve Grading,Comments,Mediatype,Genre,Price"
+    String csvHeader = "Band or Artist,Title,Catalog No,Disc Grading,Sleeve Grading,Comments,Mediatype,Genre,Price"
 
     List<String> fullCsv = new ArrayList<>()
     List<String> fullMetalCsvCd = new ArrayList<>()
@@ -43,7 +43,7 @@ class CsvProcessor implements ListingProcessor {
             String media = listing.release.medium.masterReleaseType.name()
             String genre = listing.release.genre.genreType.name()
             int price = listing.priceDkk
-            String csv = "\"$listing.release.artistName\",\"$title\",\"$listing.discGradingString\",\"$listing.sleeveGradingString\",\"$listing.comment\",\"$media\",\"$genre\",\"$price\""
+            String csv = "\"$listing.release.artistName\",\"$title\",\"$listing.catalogNo\",\"$listing.discGradingString\",\"$listing.sleeveGradingString\",\"$listing.comment\",\"$media\",\"$genre\",\"$price\""
             fullCsv << csv
             if (listing.release.medium.CD && listing.release.genre.genreType == GenreType.METAL) {
                 fullMetalCsvCd << csv
@@ -64,6 +64,6 @@ class CsvProcessor implements ListingProcessor {
 
         FileUtil.writeFile(this.configuration.generateDirectory+"/$filenameprefix"+"plader.csv", fullCsv)
         FileUtil.writeFile(this.configuration.generateDirectory+"/$filenameprefix"+"metal_cd.csv", fullMetalCsvCd)
-        FileUtil.writeFile(this.configuration.generateDirectory+"/$filenameprefix"+"metal_vinyl.csv", fullMetalCsvCd)
+        FileUtil.writeFile(this.configuration.generateDirectory+"/$filenameprefix"+"metal_vinyl.csv", fullMetalCsvVinyl)
     }
 }

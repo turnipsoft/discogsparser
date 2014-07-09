@@ -113,6 +113,8 @@ class HtmlListingProcessor implements ListingProcessor {
         writeFile('vinyls_for_sale.html', generateHtmlPage('Vinyl',vinylHtml))
         writeFile('cassettes_for_sale.html', generateHtmlPage('Cassette',cassetteHtml))
         writeFile('movies_for_sale.html', generateHtmlPage('DVD',movieHtml))
+        writeFile('metal_cds_for_sale.html', generateMetalHtmlPage('CD',cdHtml))
+        writeFile('metal_vinyls_for_sale.html', generateMetalHtmlPage('Vinyl',cdHtml))
     }
 
     private void writeFile(String filename, List<String> list) {
@@ -155,17 +157,42 @@ class HtmlListingProcessor implements ListingProcessor {
 
     }
 
+    private List<String> generateMetalHtmlPage(String media, Map<GenreType, List<HtmlListing>> map) {
+        List<String> result = []
+        counter = 0
+        white = false
+
+        String bool = media.equals("Vinyl") ? 'true' : 'false'
+
+        String startPage = "<form name=\"records\">" +
+                "<br/><input type=\"button\" name=\"collect\" value=\"Saml liste over plader\" onclick=\"javascript:collectRecords("+bool+")\"/>\n" +
+                "<br/><h1>$media</h1>\n" +
+                "<br/>"
+
+        result.add(startPage)
+        result.addAll(generateGenre("metal",media,"Metal/Industrial/Hardcore",map.get(GenreType.METAL)))
+
+        String endPage="<br/>\n" +
+                "<br/>\n" +
+                "<br/><input type=\"button\" name=\"collect\" value=\"Saml liste over plader\" onclick=\"javascript:collectRecords("+bool+")\"/></form><script language='javascript'>maxRows=$counter</script>"
+
+        result.add(endPage)
+        return result
+
+    }
+
     private List<String> generateGenre(String href, String prefix, String genre, List<HtmlListing> list) {
         List<String> result = []
 
+        String div = "<div id='$prefix$href'>"
+        String divEnd = "</div>"
+
         String intro = "<a name='$prefix$href'><h2>$genre</h2></a><br/>"
-        //String table = '''<table border='0'>
-        //                    <tr><td><strong>-</strong></td><td><strong>Kunstner</strong></td>
-        //                    <td><strong>Titel/Katalog/Grading</strong></td><td><strong>Pris</strong></td></tr>'''
         String table = '''<table border='0'>
                             <tr><td><strong>-</strong></td><td>&nbsp;</td><td><strong>Kunstner</strong></td>
                             <td><strong>Titel/Katalog/Grading</strong></td><td><strong>Pris</strong></td></tr>'''
         String tableEnd = '''</table>'''
+        result.add(div)
         result.add(intro)
         result.add(table)
 
@@ -180,6 +207,7 @@ class HtmlListingProcessor implements ListingProcessor {
         }
 
         result.add(tableEnd)
+        result.add(divEnd)
         return result
     }
 
