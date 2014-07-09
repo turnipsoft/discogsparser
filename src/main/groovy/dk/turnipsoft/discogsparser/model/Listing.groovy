@@ -37,4 +37,7 @@ class Listing {
         return processed
     }
 
+    public String toString() {
+        return "$description ($catalogNo) - $priceEur"
+    }
 }

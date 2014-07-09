@@ -25,12 +25,12 @@ class BIProcessor implements ListingProcessor {
 
     @Override
     Object processListing(Listing listing) {
-        if (!listing.forSale && listing.release.medium.masterReleaseType.equals((MasterReleaseType.CD))) {
-            if (listing.priceDkk < 0.90) {
+        if (!listing.forSale && listing.release.medium && listing.release.medium.masterReleaseType.equals((MasterReleaseType.CD))) {
+            if (listing.priceEur  < 0.90) {
                 lowValue.add(listing)
-            } else if ( listing.priceDkk > 1.90 && listing.priceDkk < 6.90) {
+            } else if ( listing.priceEur > 1.90 && listing.priceEur < 6.90) {
                 mediumValue.add(listing)
-            } else if ( listing.priceDkk >= 6.95)  {
+            } else if ( listing.priceEur >= 6.95)  {
                 highValue.add(listing)
             }
         }
