@@ -114,7 +114,7 @@ class HtmlListingProcessor implements ListingProcessor {
         writeFile('cassettes_for_sale.html', generateHtmlPage('Cassette',cassetteHtml))
         writeFile('movies_for_sale.html', generateHtmlPage('DVD',movieHtml))
         writeFile('metal_cds_for_sale.html', generateMetalHtmlPage('CD',cdHtml))
-        writeFile('metal_vinyls_for_sale.html', generateMetalHtmlPage('Vinyl',cdHtml))
+        writeFile('metal_vinyls_for_sale.html', generateMetalHtmlPage('Vinyl',vinylHtml))
     }
 
     private void writeFile(String filename, List<String> list) {

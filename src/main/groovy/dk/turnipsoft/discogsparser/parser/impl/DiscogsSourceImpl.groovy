@@ -60,23 +60,31 @@ class DiscogsSourceImpl implements DiscogsSource {
     }
 
     Listing addListingFromJson(Map<String, Object> jsonMap) {
-        Listing listing = new Listing();
-        listing.comment = jsonMap.get('comments')
-        listing.description = jsonMap.get('release').get('description')
-        listing.priceEur = jsonMap.get('price').get('value')
-        listing.releaseUrl = jsonMap.get('release').get('resource_url')
-        listing.forSale = jsonMap.get('status') == 'For Sale'
-        listing.sleeveGrading = Grading.getGrading(jsonMap.get('sleeve_condition'), Grading.GRADING_SLEEVE)
-        listing.discGrading = Grading.getGrading(jsonMap.get('condition'), Grading.GRADING_DISC)
-        listing.sleeveGradingString = jsonMap.get('sleeve_condition')
-        listing.discGradingString = jsonMap.get('condition')
-        listing.id = jsonMap.get('id')
-        listing.catalogNo = jsonMap.get('release').get('catalog_number')
-        if (!listing.catalogNo) {
-            listing.catalogNo = ''
+        Listing listing = new Listing()
+
+        try {
+            listing.comment = jsonMap.get('comments')
+            listing.description = jsonMap.get('release').get('description')
+            listing.priceEur = jsonMap.get('price').get('value')
+            listing.releaseUrl = jsonMap.get('release').get('resource_url')
+            listing.forSale = jsonMap.get('status') == 'For Sale'
+            listing.sleeveGrading = Grading.getGrading(jsonMap.get('sleeve_condition'), Grading.GRADING_SLEEVE)
+            listing.discGrading = Grading.getGrading(jsonMap.get('condition'), Grading.GRADING_DISC)
+            listing.sleeveGradingString = jsonMap.get('sleeve_condition')
+            listing.discGradingString = jsonMap.get('condition')
+            listing.id = jsonMap.get('id')
+            listing.catalogNo = jsonMap.get('release').get('catalog_number')
+            if (!listing.catalogNo) {
+                listing.catalogNo = ''
+            }
+
+            listings.add(listing)
+            return listing
+        } catch (Exception e) {
+            System.out.println("troubles with : $listing.description "+e.getMessage())
+            throw e
         }
 
-        listings.add(listing)
-        return listing
+
     }
 }
