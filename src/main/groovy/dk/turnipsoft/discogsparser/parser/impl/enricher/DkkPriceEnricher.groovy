@@ -36,6 +36,10 @@ class DkkPriceEnricher implements ListingEnricher {
             dkkPrice = 40
         } else if (dkkPrice>=45 && dkkPrice<60) {
             dkkPrice = 50
+        } else if (dkkPrice>=200 && dkkPrice<500) {
+            dkkPrice = roundUp(dkkPrice, 25)
+        } else if (dkkPrice>=500) {
+            dkkPrice = roundUp(dkkPrice, 50)
         } else {
             dkkPrice = roundUp(dkkPrice, 10)
         }
