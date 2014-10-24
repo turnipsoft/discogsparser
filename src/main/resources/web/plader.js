@@ -83,17 +83,35 @@ function discountAmount(amount) {
     }
 
 
-    function discountVinyl(price) {
-        if (price>=2000) {
-            return price * 0.8;
-        } else if (price>=1500) {
+    function discountVinyl(price, over100) {
+        if (over100>20) {
+            return price * 0.75;
+        } else if (over100>15) {
+            return price * 0.80;
+        } else if (over100>10) {
             return price * 0.85;
-        } else if (price>=1000) {
+        } else if (over100>4) {
             return price * 0.9;
-        } else if (price>=500) {
+        } else if (over100>2) {
             return price*0.95;
         } else {
             return price;
+        }
+    }
+
+    function vinylDiscountText(over100) {
+        if (over100>20) {
+            return " ( "+over100+" plader til 75,- eller derover giver 25% rabat) ";
+        } else if (over100>15) {
+            return " ( "+over100+" plader til 75,- eller derover giver 20% rabat) ";
+        } else if (over100>10) {
+            return " ( "+over100+" plader til 75,- eller derover giver 15% rabat) ";
+        } else if (over100>4) {
+            return " ( "+over100+" plader til 75,- eller derover giver 10% rabat) ";
+        } else if (over100>2) {
+            return " ( "+over100+" plader til 75,- eller derover giver 5% rabat) ";
+        } else {
+            return " ( "+over100+" plader til 75,- eller derover giver ingen rabat) ";
         }
     }
 
@@ -103,6 +121,7 @@ function discountAmount(amount) {
         var newColor = "eaeaf1";
         var totalprice = 0;
         var bought = 0;
+        var over100 = 0;
 
         for (i=1;i<=maxRows;i++) {
             var chid = 'c'+i;
@@ -114,6 +133,9 @@ function discountAmount(amount) {
                 var recordPrice = document.getElementById(priceid);
                 var price = recordPrice.innerHTML;
                 price = price.substring(0, price.length-2);
+                if (price>=75) {
+                    over100++;
+                }
                 totalprice += parseInt(price);
                 var recordHtml = recordRow.outerHTML;
                 recordHtml = recordHtml.replace('ffffff',newColor);
@@ -126,7 +148,7 @@ function discountAmount(amount) {
 
         var priceHtml = '';
         if (isVinyl==true) {
-            priceHtml="<br/><b>Total pris for vinyler: </b>"+totalprice+",-  <b>med prisrabat: </b>"+ Math.round(discountVinyl(totalprice))+",- <br/>";
+            priceHtml="<br/><b>Total pris for vinyler: </b>"+totalprice+",-  <b>med prisrabat: "+vinylDiscountText(over100)+"</b>"+ Math.round(discountVinyl(totalprice, over100))+",- <br/>";
         } else {
             priceHtml="<br/><b>Total pris for cder: </b>"+totalprice+",-  <b>med samlerabat "+discountAmount(bought)+" : </b>"+ Math.round(discount(bought, totalprice))+",- <br/>";
         }
