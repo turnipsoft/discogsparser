@@ -48,7 +48,7 @@ class ImageFetchProcessor implements ListingProcessor {
 
         String fullFilename = "$configuration.generateDirectory/$imageDir/$filename"
         curls << "sleep 2"
-        curls << "wget $configuration.imageBaseUrl$filename -O $fullFilename"
+        curls << "wget --user-agent firefox $configuration.imageBaseUrl$filename -O $fullFilename"
 
         return
 
