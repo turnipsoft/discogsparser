@@ -35,7 +35,7 @@ class ReleaseEnricher implements ListingEnricher {
     public Map<String, Object> getJSON(String url) {
         HttpUtil h = new HttpUtil()
         Thread.sleep(1000)
-        String jsonString = h.getJsonWithWget(url)
+        String jsonString = h.getJsonWithWget(url, configuration.token)
         JsonSlurper jsonSlurper = new JsonSlurper()
         return jsonSlurper.parseText(jsonString)
     }
@@ -182,7 +182,7 @@ class ReleaseEnricher implements ListingEnricher {
     @Override
     void enrich(Listing listing, Context context) {
         Listing existingListing = findListing(context, listing)
-        if (!existingListing || !existingListing.release || !existingListing.release.releaseName || !existingListing.release.medium) {
+        if (!existingListing || !existingListing.release || !existingListing.release.releaseName || !existingListing.release.medium || !existingListing.release.imageFileName) {
             //enrich release
             logger.debug("Enriching : $listing.description")
             enrichListing(listing)

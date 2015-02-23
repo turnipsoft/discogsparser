@@ -31,6 +31,7 @@ class Configuration {
     String patchFolder
     DiscogsSource source
     Properties artistSalesList = new HashSet<String>()
+    String token
 
     Logger logger = LoggerFactory.getLogger(Configuration.class)
 
@@ -54,6 +55,7 @@ class Configuration {
         this.imageBaseUrl = configMap.get('imageBaseUrl')
         this.turnipImageBaseUrl = configMap.get('turnipImageBaseUrl')
         this.patchFolder = configMap.get('patchFolder')
+        this.token = configMap.get('token')
 
         List<String> list = configMap.get('enrichers')
         this.enrichers = []
@@ -126,4 +128,7 @@ class Configuration {
         return genreOverride.get(getGenreName(artistName))
     }
 
+    public String getTokenHeader() {
+        return "--header=\"Authorization: Discogs token=$token\""
+    }
 }

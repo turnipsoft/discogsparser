@@ -1,5 +1,6 @@
 package dk.turnipsoft.discogsparser.util
 
+import dk.turnipsoft.discogsparser.model.Configuration
 import groovy.json.JsonSlurper
 import spock.lang.Specification
 
@@ -50,6 +51,25 @@ class HttpUtilSpec extends Specification {
         result
         result.size()>0
 
+    }
+
+    void "test simple wget with header()"() {
+        given:
+        String url = "https://api.discogs.com/releases/1039365"
+        HttpUtil httpUtil = new HttpUtil()
+        Configuration configuration = new Configuration()
+
+        when:
+        String json = httpUtil.getJsonWithWget(url, configuration.token)
+
+        then:
+        json
+
+        when:
+        System.out.println(json)
+
+        then:
+        json.contains("images")
     }
 }
 

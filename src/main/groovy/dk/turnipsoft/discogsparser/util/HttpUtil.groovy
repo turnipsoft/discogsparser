@@ -235,17 +235,35 @@ class HttpUtil {
         String result = hu.getJSONFromURL("http://api.discogs.com/releases/1395980")
     }
 
-    public String getJsonWithWget(String url) {
+    public String getJsonWithWget(String url, String token) {
+        String h = (token) ? "--header=\"Authorization: Discogs token=$token\"" : ""
         Runtime rt = Runtime.getRuntime();
-        String command = "wget $url -O /tmp/result.json"
+        String command = "wget $h $url -O /tmp/result.json"
+        String cmd = "/tmp/get.sh"
+        writeFile("get.sh", command)
         System.out.println("invoking $command")
-        Process ps = rt.exec(command);
+        Process ps = rt.exec(cmd);
         ps.waitFor()
         System.out.println("ps endded with "+ps.exitValue())
         System.out.println(ps.inputStream.text)
         System.out.println(ps.err.text)
 
         return readFile("/tmp/result.json")
+    }
+
+    private void writeFile(String filename, String command) {
+        File f = new File("/tmp/$filename")
+        PrintWriter pw = new PrintWriter(new FileWriter(f))
+        pw.write(command)
+        pw.close()
+        chmod(f.absolutePath)
+    }
+
+    private void chmod(String filename) {
+        Runtime rt = Runtime.getRuntime();
+        String command = "chmod 755 $filename"
+        Process ps = rt.exec(command);
+        ps.waitFor()
     }
 
     private String readFile(String filename) {
