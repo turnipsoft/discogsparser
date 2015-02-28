@@ -18,12 +18,14 @@ class MissingImageProcessor implements ListingProcessor {
 
     List<String> files
     List<String> wgets
+    String header
 
     @Override
     void init(Configuration configuration) {
         this.configuration = configuration
         this.files = []
         this.wgets = []
+        this.header = (configuration.token) ? "--header=\"Authorization: Discogs token=$configuration.token\"" : ""
     }
 
     @Override
@@ -39,8 +41,11 @@ class MissingImageProcessor implements ListingProcessor {
             File f = new File(fullPath)
             if (!f.exists() || f.size()==0) {
                 log.debug("listing $listing.description is missing its file $listing.release.imageFileName")
+                String fullFilename = "$configuration.generateDirectory/images/$listing.release.imageFileName"
+
                 wgets << "sleep 2"
-                wgets << "wget --user-agent firefox $configuration.imageBaseUrl$listing.release.imageFileName -O $listing.release.imageFileName"
+
+                wgets << "wget --user-agent dp $header \"$listing.release.publicImageUrl\" -O $fullFilename"
             } else {
                 files << "$listing.description --> $listing.release.imageFileName --> ${f.size()}"
             }

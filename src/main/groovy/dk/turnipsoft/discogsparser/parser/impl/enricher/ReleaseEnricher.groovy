@@ -122,7 +122,7 @@ class ReleaseEnricher implements ListingEnricher {
         try {
             Release release = new Release()
 
-            Map<String, Object> jsonMap = getJSON(listing.releaseUrl)
+            Map<String, Object> jsonMap = getJSON(HttpUtil.httpsify(listing.releaseUrl))
             release.releaseName = jsonMap.get('title')
             release.year = jsonMap.get('year')
             release.releaseDate = jsonMap.get('released')
@@ -141,7 +141,7 @@ class ReleaseEnricher implements ListingEnricher {
                 listing.errors.add('Unable to determine medium')
             }
 
-            enrichImages(jsonMap, release)
+            enrichThumbnail(jsonMap, release)
 
             release.jsonMap = jsonMap
             listing.release = release
@@ -156,6 +156,20 @@ class ReleaseEnricher implements ListingEnricher {
         }
     }
 
+    private Object enrichThumbnail(Map<String, Object> jsonMap, Release release) {
+        String thumbnail = jsonMap.get('thumb')
+        if (thumbnail) {
+            release.publicImageUrl = thumbnail
+            String imageFilename = thumbnail.substring(thumbnail.lastIndexOf("/")+1, thumbnail.lastIndexOf("."))
+            release.imageFileName = imageFilename
+        } else {
+            System.out.println("no thumbmail on $release.releaseName")
+
+        }
+    }
+
+
+    @Deprecated
     private Object enrichImages(Map<String, Object> jsonMap, Release release) {
         jsonMap.get('images').each { imageMap ->
             if (imageMap.get('type') == 'primary' && imageMap.get('uri150')) {
@@ -192,7 +206,7 @@ class ReleaseEnricher implements ListingEnricher {
             if (!listing.release.imageFileName) {
                 logger.debug("enriching images on : $listing.description")
                 Map<String, Object> jsonMap = listing.release.jsonMap
-                enrichImages(jsonMap, listing.release)
+                enrichThumbnail(jsonMap, listing.release)
             }
         }
     }

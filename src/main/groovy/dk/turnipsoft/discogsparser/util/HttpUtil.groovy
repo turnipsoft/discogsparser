@@ -238,7 +238,7 @@ class HttpUtil {
     public String getJsonWithWget(String url, String token) {
         String h = (token) ? "--header=\"Authorization: Discogs token=$token\"" : ""
         Runtime rt = Runtime.getRuntime();
-        String command = "wget $h $url -O /tmp/result.json"
+        String command = "wget $h \"$url\" -O /tmp/result.json"
         String cmd = "/tmp/get.sh"
         writeFile("get.sh", command)
         System.out.println("invoking $command")
@@ -249,6 +249,24 @@ class HttpUtil {
         System.out.println(ps.err.text)
 
         return readFile("/tmp/result.json")
+    }
+
+    static String httpsify(String url) {
+        return url.replace("http","https")
+    }
+
+    public void getResourceWithWget(String url, String token) {
+        String h = (token) ? "--header=\"Authorization: Discogs token=$token\"" : ""
+        Runtime rt = Runtime.getRuntime();
+        String command = "wget $h $url -O /tmp/image.jpeg"
+        String cmd = "/tmp/get.sh"
+        writeFile("get.sh", command)
+        System.out.println("invoking $command")
+        Process ps = rt.exec(cmd);
+        ps.waitFor()
+        System.out.println("ps endded with "+ps.exitValue())
+        System.out.println(ps.inputStream.text)
+        System.out.println(ps.err.text)
     }
 
     private void writeFile(String filename, String command) {

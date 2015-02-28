@@ -12,12 +12,11 @@ import dk.turnipsoft.discogsparser.util.HttpUtil
 class ImageFetchProcessor implements ListingProcessor {
 
     Configuration configuration
-
     String imageDir = "images"
-
     HttpUtil httpUtil = new HttpUtil()
-
     List<String> curls = []
+    String token
+    String header
 
     void initImageDir() {
         File imageDirectory = new File(configuration.generateDirectory+"/"+imageDir)
@@ -48,10 +47,11 @@ class ImageFetchProcessor implements ListingProcessor {
 
         String fullFilename = "$configuration.generateDirectory/$imageDir/$filename"
         curls << "sleep 2"
-        curls << "wget --user-agent firefox $configuration.imageBaseUrl$filename -O $fullFilename"
+        curls << "wget --user-agent dp $header \"$listing.release.publicImageUrl\" -O $fullFilename"
 
         return
 
+        /*
         if (filename) {
             //System.out.println("fetching image : $filename for listing: $listing.description")
             try {
@@ -65,13 +65,15 @@ class ImageFetchProcessor implements ListingProcessor {
                 listing.errors.add('Unable to fetch image:'+configuration.imageBaseUrl+filename)
                 curls << "curl $configuration.imageBaseUrl$filename > $fullFilename"
             }
-        }
+        }*/
     }
 
     @Override
     void init(Configuration configuration) {
         this.configuration = configuration
         initImageDir()
+        this.token = configuration.token
+        this.header = (token) ? "--header=\"Authorization: Discogs token=$token\"" : ""
     }
 
     @Override
