@@ -18,10 +18,11 @@ class DkkPriceEnricher implements ListingEnricher {
     }
 
     double dkk = 7.5
+    double factor = 0.95
 
     @Override
     void enrich(Listing listing, Context context) {
-        int dkkPrice = listing.getPriceEur() * dkk
+        int dkkPrice = listing.getPriceEur() * dkk * factor
         if (dkkPrice<10) {
             dkkPrice = 5
         } else if (dkkPrice<15) {

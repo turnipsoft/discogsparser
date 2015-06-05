@@ -238,7 +238,7 @@ class HttpUtil {
     public String getJsonWithWget(String url, String token) {
         String h = (token) ? "--header=\"Authorization: Discogs token=$token\"" : ""
         Runtime rt = Runtime.getRuntime();
-        String command = "wget $h \"$url\" -O /tmp/result.json"
+        String command = "/usr/local/bin/wget $h \"$url\" -O /tmp/result.json"
         String cmd = "/tmp/get.sh"
         writeFile("get.sh", command)
         System.out.println("invoking $command")
@@ -258,7 +258,7 @@ class HttpUtil {
     public void getResourceWithWget(String url, String token) {
         String h = (token) ? "--header=\"Authorization: Discogs token=$token\"" : ""
         Runtime rt = Runtime.getRuntime();
-        String command = "wget $h $url -O /tmp/image.jpeg"
+        String command = "/usr/local/bin/wget $h $url -O /tmp/image.jpeg"
         String cmd = "/tmp/get.sh"
         writeFile("get.sh", command)
         System.out.println("invoking $command")
