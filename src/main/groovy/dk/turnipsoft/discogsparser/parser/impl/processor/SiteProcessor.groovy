@@ -39,6 +39,7 @@ class SiteProcessor implements ListingProcessor {
         generateSalesFile("metal_cd")
         generateSalesFile("metal_vinyl")
         generateSalesFile("cassette")
+        generateSalesFile("movie")
         copyContents('about.html')
         copyContents('forsendelse.html')
         copyContents('goldmine.html')

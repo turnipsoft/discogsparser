@@ -2,6 +2,7 @@ ftp -u ftp://shartvig@web15.gigahost.dk/www/plader.nu/index.html ~/discogsparser
 ftp -u ftp://shartvig@web15.gigahost.dk/www/plader.nu/cd.html ~/discogsparser/site/cd.html 
 ftp -u ftp://shartvig@web15.gigahost.dk/www/plader.nu/vinyl.html ~/discogsparser/site/vinyl.html
 ftp -u ftp://shartvig@web15.gigahost.dk/www/plader.nu/cassette.html ~/discogsparser/site/cassette.html
+ftp -u ftp://shartvig@web15.gigahost.dk/www/plader.nu/movie.html ~/discogsparser/site/movie.html
 ftp -u ftp://shartvig@web15.gigahost.dk/www/plader.nu/about.html ~/discogsparser/site/about.html 
 ftp -u ftp://shartvig@web15.gigahost.dk/www/plader.nu/goldmine.html ~/discogsparser/site/goldmine.html 
 ftp -u ftp://shartvig@web15.gigahost.dk/www/plader.nu/forsendelse.html ~/discogsparser/site/forsendelse.html 
