@@ -1,0 +1,10 @@
+{
+    "configuration" : {
+        "inputFile" : "/Users/SorenHartvig/titler.txt",
+        "outputDir" : "/tmp",
+        "allowedGradings" : "Near Mint,Very Good Plus,Mint",
+        "threshold" : 7,
+        "bonus" : 30,
+        "wantThreshold" : 6
+    }
+}
