@@ -28,7 +28,7 @@ class SimpleFileParser {
                 println "Skipping $s"
                 continue;
             }
-            s = s.replace("–","-")
+            s = s.replace("–","-").trim()
             SimpleListingPrice slp = new SimpleListingPrice()
             int potentialOriginalPriceIdx = s.lastIndexOf(" ")
             String potentialOriginalPrice = s.substring(potentialOriginalPriceIdx+1)

@@ -12,6 +12,7 @@ class PriceScanner {
     String SEARCH_URL = 'http://www.discogs.com/search/?q='
     String BASE_URL = 'http://www.discogs.com'
     String SALES_URL = 'http://www.discogs.com/sell/list?sort=price%2Casc&limit=20&master_id=${masterId}&ev=mb'
+    String SALES_URL_SINGLE = 'http://www.discogs.com/sell/release/'
 
     String mediatype
     HttpUtil httpUtil
@@ -23,18 +24,19 @@ class PriceScanner {
         pricerConfiguration = new PricerConfiguration()
     }
 
-    String transformStringToSearchString(String s) {
+    String transformStringToSearchString(String s, String type) {
         String search = s.toLowerCase().replace(' ','+')
-        return "${search}&type=master"
+        return "${search}&type=${type}"
     }
 
     SimpleReleasePrice performScan(String artistname, String releasename) {
         String search = artistname + " " + releasename
+        search = search.trim()
         SimpleReleasePrice simpleReleasePrice = new SimpleReleasePrice()
         simpleReleasePrice.artistName = artistname
         simpleReleasePrice.release = releasename
 
-        byte [] result = httpUtil.getBytesFromUrl(SEARCH_URL+transformStringToSearchString(search))
+        byte [] result = httpUtil.getBytesFromUrl(SEARCH_URL+transformStringToSearchString(search, 'master'))
         String htmlResult = new String(result, 'UTF-8')
 
         String masterUrl = getMasterUrl(htmlResult,search)
@@ -48,10 +50,44 @@ class PriceScanner {
             htmlResult = new String(result, 'UTF-8')
             parseAndEnrich(htmlResult, simpleReleasePrice)
         } else {
-            simpleReleasePrice.noData = true
+            performSingleScan(search, simpleReleasePrice)
         }
 
         return simpleReleasePrice
+    }
+
+    SimpleReleasePrice performSingleScan(String search, SimpleReleasePrice srp) {
+        byte [] result = httpUtil.getBytesFromUrl(SEARCH_URL+transformStringToSearchString(search,'release'))
+        String htmlResult = new String(result, 'UTF-8')
+
+        String url = getMasterUrl(htmlResult, search)
+        if (!url) {
+            srp.noData = true
+            return srp
+        }
+        String itemId = getMasterId(url)
+
+        result = httpUtil.getBytesFromUrl(SALES_URL_SINGLE+itemId)
+        htmlResult = new String(result, 'UTF-8')
+        parseAndEnrich(htmlResult, srp)
+        return srp
+    }
+
+    String getReleaseSalesUrl(String html, search) {
+        search = cleanSearch(search)
+        if (search.toLowerCase().startsWith("the")) {
+            search = search.replace('The ','').replace('the ', '').replace('THE ','')
+        }
+        String masterMatch = '/'+search.toLowerCase().replace(' ','-')
+        int idx = html.toLowerCase().indexOf(masterMatch)
+        if (idx<0) {
+            return null
+        }
+        String rest = html.substring(idx)
+        idx = rest.indexOf('"')
+        String url = rest.substring(0,idx)
+
+        return url
     }
 
     static double EUR = 7.5
@@ -112,7 +148,7 @@ class PriceScanner {
     }
 
     boolean isCandidate(SimpleReleasePrice srp) {
-        if (srp.itemDescriptionTitle.toLowerCase().contains("promo")) {
+        if (srp.itemDescriptionTitle.toLowerCase().contains("promo") || srp.itemDescriptionTitle.toLowerCase().contains("unofficial")) {
             return false
         }
 
@@ -166,6 +202,9 @@ class PriceScanner {
     }
     String getMasterUrl(String html, String search) {
         search = cleanSearch(search)
+        if (search.toLowerCase().startsWith("the")) {
+            search = search.replace('The ','').replace('the ', '').replace('THE ','')
+        }
         String masterMatch = '/'+search.toLowerCase().replace(' ','-')
         int idx = html.toLowerCase().indexOf(masterMatch)
         if (idx<0) {
@@ -176,7 +215,6 @@ class PriceScanner {
         String url = rest.substring(0,idx)
 
         return url
-
     }
 
     String getMasterId(String masterUrl) {
