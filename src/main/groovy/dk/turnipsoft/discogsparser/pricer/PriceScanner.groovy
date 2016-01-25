@@ -11,7 +11,7 @@ class PriceScanner {
 
     String SEARCH_URL = 'http://www.discogs.com/search/?q='
     String BASE_URL = 'http://www.discogs.com'
-    String SALES_URL = 'http://www.discogs.com/sell/list?sort=price%2Casc&limit=20&master_id=${masterId}&ev=mb'
+    String SALES_URL = 'http://www.discogs.com/sell/list?sort=price%2Casc&limit=250&master_id=${masterId}&ev=mb'
     String SALES_URL_SINGLE = 'http://www.discogs.com/sell/release/'
 
     String mediatype
@@ -30,7 +30,7 @@ class PriceScanner {
     }
 
     SimpleReleasePrice performScan(String artistname, String releasename) {
-        String search = artistname + " " + releasename
+        String search = artistname + ' ' + (releasename?:'')
         search = search.trim()
         SimpleReleasePrice simpleReleasePrice = new SimpleReleasePrice()
         simpleReleasePrice.artistName = artistname
@@ -73,23 +73,6 @@ class PriceScanner {
         return srp
     }
 
-    String getReleaseSalesUrl(String html, search) {
-        search = cleanSearch(search)
-        if (search.toLowerCase().startsWith("the")) {
-            search = search.replace('The ','').replace('the ', '').replace('THE ','')
-        }
-        String masterMatch = '/'+search.toLowerCase().replace(' ','-')
-        int idx = html.toLowerCase().indexOf(masterMatch)
-        if (idx<0) {
-            return null
-        }
-        String rest = html.substring(idx)
-        idx = rest.indexOf('"')
-        String url = rest.substring(0,idx)
-
-        return url
-    }
-
     static double EUR = 7.5
     static double USD = 7
     static double GBP = 10
@@ -128,6 +111,11 @@ class PriceScanner {
         boolean foundMatch = false
         while (!foundMatch) {
             int idxTrStart = html.indexOf("<tr class=\"shortcut_navigable \">")
+            if (idxTrStart<0) {
+                println("Didn't find any")
+                srp.noData = true
+                return srp
+            }
             String rest = html.substring(idxTrStart)
             int idxTrEnd = rest.indexOf("</tr>")
             String firstSell = rest.substring(0, idxTrEnd)
@@ -154,7 +142,14 @@ class PriceScanner {
 
         if (! (srp.itemDescriptionTitle.toLowerCase().contains("(${srp.mediatype.toLowerCase()}") ||
                srp.itemDescriptionTitle.toLowerCase().contains("(2x${srp.mediatype.toLowerCase()}") )) {
-            return false
+            if (srp.mediatype.toLowerCase()=='lp') {
+                if (srp.itemDescriptionTitle.contains("(12")) {
+                    // intentionally blank.. 12" kan godt gåi kategori LP, da det bare er vinyler man leder efter
+                } else {
+                    return false
+                }
+            }
+
         }
 
         boolean gradingMediaOk = false
@@ -198,8 +193,9 @@ class PriceScanner {
     }
 
     String cleanSearch(String search) {
-        return search.replace("'",'').replace('"','').replace('_','').replace('/','')
+        return search.replace("'",'').replace('"','').replace('_','').replace('/','').replace('“','').replace('”','')
     }
+
     String getMasterUrl(String html, String search) {
         search = cleanSearch(search)
         if (search.toLowerCase().startsWith("the")) {

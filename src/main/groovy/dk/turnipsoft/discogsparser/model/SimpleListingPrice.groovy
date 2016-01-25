@@ -8,4 +8,5 @@ class SimpleListingPrice {
     String releaseName
     String priceDkk
     String mediatype
+    String originalSalesLine
 }

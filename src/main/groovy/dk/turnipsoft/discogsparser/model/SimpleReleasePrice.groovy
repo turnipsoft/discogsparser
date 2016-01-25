@@ -14,15 +14,28 @@ class SimpleReleasePrice {
     String catalogNO
     String originalPriceDkk
     String itemDescriptionTitle
+    String originalSalesLine
     boolean noData = false
     boolean buy
     String want
     String have
 
     public String toString() {
+        double f = hentFortjeneste()
+
         return noData ? "$artistName - $release : Unable to obtain data" :
         "$itemDescriptionTitle ($mediatype), Cat:${catalogNO}, condition: ${conditionMedia}/${conditionSleeve}, want: ${want}, " +
-                "price:  $price / $priceDKK, originalPrice: $originalPriceDkk${originalPriceDkk<priceDKK?', BUY!':''}"
+                "price:  $price / $priceDKK, originalPrice: $originalPriceDkk ${f>0?', BUY!':''}"
+    }
+
+    double hentFortjeneste() {
+        if (this.originalPriceDkk && this.priceDKK) {
+            double salgMinusFee = ((this.priceDKK as Double) * 0.9) * 0.97
+            double fortjeneste = salgMinusFee - (this.originalPriceDkk as Double)
+            return fortjeneste
+        } else {
+            return 0
+        }
     }
 
     public String toHtmlTableRow() {

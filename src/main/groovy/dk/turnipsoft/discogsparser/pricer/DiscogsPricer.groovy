@@ -26,8 +26,9 @@ class DiscogsPricer {
             PriceScanner scanner = new PriceScanner(it.mediatype)
             SimpleReleasePrice srp = scanner.performScan(it.artistName,it.releaseName)
             srp.originalPriceDkk = it.priceDkk
-            println srp
-            if (srp.originalPriceDkk<srp.priceDKK) {
+            srp.originalSalesLine = it.originalSalesLine
+            println srp.toString() + "-------- ${it.originalSalesLine}"
+            if (srp.hentFortjeneste()>0) {
                 srp.buy = true
             }
             scanResult << srp
@@ -49,53 +50,76 @@ class DiscogsPricer {
             }
         }
 
-        println("REPORT ------------- REPORT")
+        println("-------------- REPORT -------------")
         report(scanResult)
     }
 
     public void report(List<SimpleReleasePrice> results) {
-        println("HIGH HIGH PRIORITY")
-        println("_____________")
-        report(results,4,30,5000)
         println("")
+        println("MAYBE CHECK THESE COULDN'T FIND DATA")
+        println("_____________")
 
-        println("HIGH PRIORITY")
-        println("_____________")
-        report(results,4,15,30)
-        println("")
+        results.findAll{it.noData}.each {
+            println it.originalSalesLine
+        }
 
-        println("PRIORITY")
-        println("_____________")
-        report(results,4,10,15)
-        println("")
-
-        println("MINOR PRIORITY")
-        println("_____________")
-        report(results,4,10,15)
-        println("")
-
-        println("LOW PRIORITY")
-        println("_____________")
-        report(results,2,5,5000)
-        println("")
-
-        println("ALL")
-        println("_____________")
-        report(results,1,0,5000)
-        println("")
+        reportOrdre("MUST", results, 4, 100,10000)
+        reportOrdre("HIGH", results, 4, 30,100)
+        reportOrdre("MEDIUM", results, 4, 20,30)
+        reportOrdre("MEDIUM-LOW", results, 4, 10,20)
+        reportOrdre("LOW", results, 4, 0,10)
+        reportOrdre("ALL", results, 2, 0,10000)
 
     }
 
-    public void report(List<SimpleReleasePrice> results, int minWants, double min, double max) {
+
+
+    double hentFortjeneste(SimpleReleasePrice srp) {
+        double salgMinusFee = ((srp.priceDKK as Double) * 0.9) * 0.97
+        double fortjeneste = salgMinusFee - (srp.originalPriceDkk as Double)
+        return fortjeneste
+    }
+
+    public void reportOrdre(String prio, List<SimpleReleasePrice> results, int minWants, double min, double max) {
+        println "############################################################"
+        println "-------- $prio ($minWants , $min - $max) ---------"
+        println ""
+        double sum = 0
+        double original = 0
+        double salgssum = 0
         results.each {
             if (it.buy && it.originalPriceDkk && it.priceDKK) {
                 int wants = it.want as Integer
-                double salgMinusFee = ((it.priceDKK as Double) * 0.9) * 0.97
-                double fortjeneste = salgMinusFee - (it.originalPriceDkk as Double)
+                double fortjeneste = hentFortjeneste(it)
                 if (wants >= minWants && fortjeneste >= min && fortjeneste<max) {
-                    println fortjeneste + " - " + it.toString()
+                    sum+=fortjeneste
+                    original += (it.originalPriceDkk as Double)
+                    salgssum += (it.priceDKK as Double)
+                    println it.originalSalesLine
                 }
             }
         }
+
+        println("")
+        println("----BI----")
+        println("")
+        results.each {
+            if (it.buy && it.originalPriceDkk && it.priceDKK) {
+                int wants = it.want as Integer
+                double fortjeneste = hentFortjeneste(it)
+                if (wants >= minWants && fortjeneste >= min && fortjeneste<max) {
+                    println "Fortjeneste ${fortjeneste}, Wants: ${wants}, Min.price: ${it.priceDKK} : ${it.itemDescriptionTitle} , ${it.catalogNO}"
+                }
+            }
+        }
+        println("")
+        println("Samlet fortjeneste: $sum")
+        println("Købspris: ${original}")
+        println("Salgspris: ${salgssum}")
+        println ""
+        println "############################################################"
+        println ""
+
     }
+
 }

@@ -28,20 +28,33 @@ class SimpleFileParser {
                 println "Skipping $s"
                 continue;
             }
-            s = s.replace("–","-").trim()
+            s = s.replace("–","-").replace(":","-").trim()
             SimpleListingPrice slp = new SimpleListingPrice()
+            slp.originalSalesLine = s
+
+            if (s.contains(",-")) {
+                s = s.substring(0, s.indexOf(',-')+2)
+            }
+            if (s.endsWith('kr') || s.endsWith(',-')) {
+                s = s.substring(0, s.length()-2)
+            } else if (s.endsWith('kr.')) {
+                s = s.substring(0, s.length()-3)
+            }
+            s=s.trim()
             int potentialOriginalPriceIdx = s.lastIndexOf(" ")
             String potentialOriginalPrice = s.substring(potentialOriginalPriceIdx+1)
-            if (potentialOriginalPrice.toLowerCase().endsWith("kr") || potentialOriginalPrice.endsWith(",-")) {
-                potentialOriginalPrice = potentialOriginalPrice.substring(0, potentialOriginalPrice.length()-2)
-            }
+
             if (potentialOriginalPrice.isNumber()) {
                 slp.priceDkk = potentialOriginalPrice
                 s = s.substring(0,potentialOriginalPriceIdx)
             }
             String[] splitted = s.split("-")
-            slp.artistName = splitted[0].trim()
-            slp.releaseName = cleanRelease(splitted[1].trim())
+            slp.artistName = cleanRelease(splitted[0].trim())
+
+            if (splitted.length==2) {
+                slp.releaseName = cleanRelease(splitted[1].trim())
+            }
+
             slp.mediatype = mediaType
             if (!slp.priceDkk) {
                 slp.priceDkk = oPrice

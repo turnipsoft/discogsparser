@@ -116,7 +116,7 @@ class HttpUtil {
     }
 
     byte[] getBytesFromUrl(String url) {
-        Thread.sleep(1000)
+        Thread.sleep(100)
 
         URL u = new URL(url)
         URLConnection conn = u.openConnection()

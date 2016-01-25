@@ -89,11 +89,11 @@ function discountAmount(amount) {
         } else if (over100>15) {
             return price * 0.80;
         } else if (over100>10) {
-            return price * 0.85;
+            return price * 0.80;
         } else if (over100>4) {
-            return price * 0.9;
+            return price * 0.85;
         } else if (over100>2) {
-            return price*0.95;
+            return price*0.10;
         } else {
             return price;
         }
@@ -105,11 +105,11 @@ function discountAmount(amount) {
         } else if (over100>15) {
             return " ( "+over100+" plader til 75,- eller derover giver 20% rabat) ";
         } else if (over100>10) {
-            return " ( "+over100+" plader til 75,- eller derover giver 15% rabat) ";
+            return " ( "+over100+" plader til 75,- eller derover giver 20% rabat) ";
         } else if (over100>4) {
-            return " ( "+over100+" plader til 75,- eller derover giver 10% rabat) ";
+            return " ( "+over100+" plader til 75,- eller derover giver 15% rabat) ";
         } else if (over100>2) {
-            return " ( "+over100+" plader til 75,- eller derover giver 5% rabat) ";
+            return " ( "+over100+" plader til 75,- eller derover giver 10% rabat) ";
         } else {
             return " ( "+over100+" plader til 75,- eller derover giver ingen rabat) ";
         }
