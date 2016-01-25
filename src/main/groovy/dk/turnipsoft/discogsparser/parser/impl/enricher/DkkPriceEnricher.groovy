@@ -18,7 +18,7 @@ class DkkPriceEnricher implements ListingEnricher {
     }
 
     double dkk = 7.5
-    double factor = 0.95
+    double factor = 0.90
 
     @Override
     void enrich(Listing listing, Context context) {
