@@ -25,7 +25,7 @@ class MissingImageProcessor implements ListingProcessor {
         this.configuration = configuration
         this.files = []
         this.wgets = []
-        this.header = (configuration.token) ? "--header=\"Authorization: Discogs token=$configuration.token\"" : ""
+        this.header = (configuration.token) ? "--no-check-certificate --header=\"Authorization: Discogs token=$configuration.token\"" : ""
     }
 
     @Override
@@ -45,7 +45,7 @@ class MissingImageProcessor implements ListingProcessor {
 
                 wgets << "sleep 2"
 
-                wgets << "wget --user-agent dp $header \"$listing.release.publicImageUrl\" -O $fullFilename"
+                wgets << "wget --user-agent dp --no-check-certificate $header \"$listing.release.publicImageUrl\" -O $fullFilename"
             } else {
                 files << "$listing.description --> $listing.release.imageFileName --> ${f.size()}"
             }

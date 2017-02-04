@@ -3,7 +3,7 @@
         "listingurl" : "http://api.discogs.com/users/$username/inventory",
         "releaseurl" : "http://api.discogs.com/users/$username/inventory",
         "username" : "shartvig",
-        "generatedir" : "/Users/SorenHartvig/discogsparser",
+        "generatedir" : "/Users/sorenhartvig/discogsparser",
         "databasename" : "discogs.db.json",
         "enrichers" : [ "dk.turnipsoft.discogsparser.parser.impl.enricher.ReleaseEnricher",
                         "dk.turnipsoft.discogsparser.parser.impl.enricher.ArtistEnricher",

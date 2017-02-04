@@ -46,26 +46,12 @@ class ImageFetchProcessor implements ListingProcessor {
     private void fetchFile(String filename, Listing listing) {
 
         String fullFilename = "$configuration.generateDirectory/$imageDir/$filename"
-        curls << "sleep 2"
-        curls << "wget --user-agent dp $header \"$listing.release.publicImageUrl\" -O $fullFilename"
+        if (listing.release.publicImageUrl && !listing.release.publicImageUrl.contains('pixogs')) {
+            curls << "sleep 2"
+            curls << "wget --no-check-certificate --user-agent dp $header \"$listing.release.publicImageUrl\" -O $fullFilename"
+        }
 
         return
-
-        /*
-        if (filename) {
-            //System.out.println("fetching image : $filename for listing: $listing.description")
-            try {
-                byte[] imageBytes = httpUtil.getBytesFromUrl(configuration.imageBaseUrl+filename)
-                File f = new File(fullFilename)
-                DataOutputStream dos = new DataOutputStream(new FileOutputStream(f))
-                dos.write(imageBytes)
-                dos.close()
-            } catch (IOException ioe) {
-                //System.out.println("Can't fetch image: "+ioe.message)
-                listing.errors.add('Unable to fetch image:'+configuration.imageBaseUrl+filename)
-                curls << "curl $configuration.imageBaseUrl$filename > $fullFilename"
-            }
-        }*/
     }
 
     @Override

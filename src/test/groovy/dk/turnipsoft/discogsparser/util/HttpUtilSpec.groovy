@@ -72,19 +72,6 @@ class HttpUtilSpec extends Specification {
         json.contains("images")
         json.contains("thumb")
     }
-
-    void "test wget images with header()"() {
-        given:
-        String url = "\"https://api-img.discogs.com/tBC8Yy8gK2RuZzMqsgFRYJiZZro=/fit-in/150x150/filters:strip_icc():format(jpeg):mode_rgb()/discogs-images/R-1039365-1295860244.jpeg.jpg\""
-        HttpUtil httpUtil = new HttpUtil()
-        Configuration configuration = new Configuration()
-
-        when:
-        httpUtil.getResourceWithWget(url, configuration.token)
-
-        then:
-        true==true
-    }
 }
 
 

@@ -56,14 +56,6 @@ class HttpUtil {
         return response
     }
 
-    String sendHttpRequest(String url, Map<String, String> params) {
-        URI uri = buildUri(url, params, false)
-        HttpGet httpGet = prepareHttpGet(uri)
-        HttpResponse response = httpClientExecute(httpGet, null)
-        String responseContent = readContent(response.entity.content)
-        return responseContent
-    }
-
     String readContent(InputStream i) {
         BufferedReader br = new BufferedReader(new InputStreamReader(i))
         String s = null
@@ -72,26 +64,6 @@ class HttpUtil {
             b.append(s)
         }
         return b.toString()
-    }
-
-    byte[] getBytesFromUrl2(String url) {
-        URIBuilder uriBuilder = new URIBuilder(url)
-        URI uri = uriBuilder.build()
-        HttpGet httpGet = new HttpGet(uri)
-        httpGet.setHeader("User-Agent",userAgent)
-        HttpResponse response = httpClientExecute(httpGet, null)
-        if (response.statusLine.statusCode!=200) {
-            throw new IOException(String.valueOf(response.statusLine.statusCode))
-        } else {
-            InputStream is = response.entity.content
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream()
-            byte b
-            while ((b=is.read())!=-1) {
-                bytes.write(b)
-            }
-            bytes.close()
-            return bytes.toByteArray()
-        }
     }
 
     byte[] getBytesFromUrl3(String url) {
@@ -116,8 +88,6 @@ class HttpUtil {
     }
 
     byte[] getBytesFromUrl(String url) {
-        Thread.sleep(100)
-
         URL u = new URL(url)
         URLConnection conn = u.openConnection()
         conn.addRequestProperty("User-Agent",
@@ -133,7 +103,7 @@ class HttpUtil {
     }
 
     String getJSONFromURL(String url) {
-        Thread.sleep(1000)
+        Thread.sleep(10000)
         URL u = new URL(url)
         URLConnection conn = u.openConnection()
         addHeaders(conn)
@@ -162,27 +132,6 @@ class HttpUtil {
         conn.addRequestProperty("Host", "api.discogs.com")
         conn.addRequestProperty("Cookie", "sid=8eb952a5a718defda61b8b06759143a9; __utma=15419939.1274148246.1365163038.1391704993.1393137793.18; __utmz=15419939.1365163038.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _ga=GA1.2.1274148246.1365163038; __gads=ID=62c6889a10935f48:T=1365163038:S=ALNI_MZTm79_-2oohAttsx_rJ-nkqUeHFA; mp_session=061f28051f9f18049f22dd2b; ck_username=shartvig")
         */
-    }
-
-
-    int sendHttpsRequest(String url, Map<String, String> params) {
-        URI uri = buildUri(url, params, true)
-        HttpGet httpGet = prepareHttpGet(uri)
-        HttpResponse response = httpClientExecute(httpGet, null)
-        String responseContent = response.entity.content.getText(Consts.UTF_8.toString())
-        return responseContent
-    }
-
-    int sendRequestBasicAuth(String url, Map<String, String> params, String username, String password) {
-        URI uri = buildUri(url, params, true)
-        HttpGet httpGet = prepareHttpGet(uri)
-        HttpClientContext context = HttpClientContext.create()
-        CredentialsProvider credentialsProvider = new BasicCredentialsProvider()
-        AuthScope authScope = new AuthScope(uri.getHost(), AuthScope.ANY_PORT)
-        UsernamePasswordCredentials usernamePasswordCredentials = new UsernamePasswordCredentials(username, password)
-        credentialsProvider.setCredentials(authScope, usernamePasswordCredentials)
-        context.credentialsProvider = credentialsProvider
-        return httpClientExecute(httpGet, context)
     }
 
     /**
@@ -236,9 +185,10 @@ class HttpUtil {
     }
 
     public String getJsonWithWget(String url, String token) {
+        Thread.sleep(21000)
         String h = (token) ? "--header=\"Authorization: Discogs token=$token\"" : ""
         Runtime rt = Runtime.getRuntime();
-        String command = "/usr/local/bin/wget $h \"$url\" -O /tmp/result.json"
+        String command = "wget $h --no-check-certificate \"$url\" -O /tmp/result.json"
         String cmd = "/tmp/get.sh"
         writeFile("get.sh", command)
         System.out.println("invoking $command")
@@ -252,22 +202,13 @@ class HttpUtil {
     }
 
     static String httpsify(String url) {
-        return url.replace("http","https")
+        if (!url.contains('https:')) {
+            return url.replace("http","https")
+        } else {
+            return url
+        }
     }
 
-    public void getResourceWithWget(String url, String token) {
-        String h = (token) ? "--header=\"Authorization: Discogs token=$token\"" : ""
-        Runtime rt = Runtime.getRuntime();
-        String command = "/usr/local/bin/wget $h $url -O /tmp/image.jpeg"
-        String cmd = "/tmp/get.sh"
-        writeFile("get.sh", command)
-        System.out.println("invoking $command")
-        Process ps = rt.exec(cmd);
-        ps.waitFor()
-        System.out.println("ps endded with "+ps.exitValue())
-        System.out.println(ps.inputStream.text)
-        System.out.println(ps.err.text)
-    }
 
     private void writeFile(String filename, String command) {
         File f = new File("/tmp/$filename")
